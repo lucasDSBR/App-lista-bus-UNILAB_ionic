@@ -1,0 +1,54 @@
+<ion-toolbar>
+  <ion-buttons slot="secondary">
+    <ion-button>
+      <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-title>Checklist Bus UNILAB</ion-title>
+</ion-toolbar>
+
+<ion-content>
+<ion-grid>
+  <ion-row>
+    <ion-col class="ion-align-self-center">
+      <h1>Criar Lista</h1>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="ion-align-self-center">
+      <ion-item>
+        <ion-label>Nome da Lista</ion-label>
+        <ion-input placeholder="Ex: lista 1"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Data de Ida</ion-label>
+        <ion-datetime [pickerOptions]="customPickerOptionsIda" displayFormat="DD/MM/YYYY" [value]="dataIda"></ion-datetime>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Data de Retorno</ion-label>
+        <ion-datetime [pickerOptions]="customPickerOptionsVolta" displayFormat="DD/MM/YYYY" [value]="dataVolta"></ion-datetime>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="ion-align-self-center">
+      <ion-item>
+        <ion-label>Total de Pessoas</ion-label>
+        <ion-input [value]="totalDePessoas" placeholder="Ex: 50"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-button expand="block">Criar</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+</ion-content>
