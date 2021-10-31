@@ -1,0 +1,21 @@
+<ion-toolbar color="#6959CD">
+  <ion-buttons slot="secondary">
+    <ion-button>
+      <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-title>Checklist Bus UNILAB</ion-title>
+</ion-toolbar>
+
+<ion-content>
+  <ion-item *ngFor="let item of data" detail>
+    <ion-label class="ion-text-wrap">
+      <ion-text color="primary">
+        <h2>{{item.name}}</h2>
+      </ion-text>
+      <p>Ida: {{item.dataIda}}</p>
+      <p>Retorno: {{item.dataVolta}}</p>
+    </ion-label>
+  </ion-item>
+</ion-content>
+

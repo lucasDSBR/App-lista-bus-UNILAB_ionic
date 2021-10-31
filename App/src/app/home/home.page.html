@@ -1,20 +1,63 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content>
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide>
+      <!--Inicio slide principal-->
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1>Checklist Bus UNILAB</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <img id="imgprincip" src="../../assets/checklist.png" />
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <h4>Bem vindo(a). Faça seu login, busque por uma lista ativa da semana e informe se vai ou volta.</h4>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <img id="imgswipe" src="../../assets/swipe.png" />
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <!--Fim slide principal-->
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <img id="imgswipe" src="../../assets/credential.png" />
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <h1>Entrar</h1>
+          </ion-col>
+        </ion-row>
+        <!--formulario login-->
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">E-mail</ion-label>
+              <ion-input></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Senha</ion-label>
+              <ion-input type="password"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button color="light">Entrar</ion-button>
+          </ion-col>
+        </ion-row>
+        <!-- fim formulario login-->
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
