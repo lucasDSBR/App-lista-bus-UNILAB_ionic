@@ -1,61 +1,23 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
-
+import { ListaService } from '../../Service/Lista.service';
 @Component({
   selector: 'app-lists',
   templateUrl: './lists.page.html',
   styleUrls: ['./lists.page.scss'],
+  providers:[ListaService]
 })
 export class ListsPage implements OnInit {
+  data = []
+  constructor(
+    private listaServices: ListaService
+  ) { }
 
-  constructor() { }
-  data = [
-    {
-      name: "lista 1",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 2",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 3",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 3",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 3",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 3",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 3",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 3",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    },
-    {
-      name: "lista 3",
-      dataIda: "31/03/2021",
-      dataVolta: "03/04/2021"
-    }
-  ]
   ngOnInit() {
+    this.listaServices.getLista().then((resposta: any) => {
+      this.data = resposta.items
+      console.log(this.data)
+    })
   }
 
+  
 }

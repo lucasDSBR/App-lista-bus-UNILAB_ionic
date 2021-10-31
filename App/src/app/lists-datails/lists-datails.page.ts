@@ -1,34 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { ListaService } from '../../Service/Lista.service';
+import { Usuariolista } from '../../Model/Usuariolista.model';
 @Component({
   selector: 'app-lists-datails',
   templateUrl: './lists-datails.page.html',
   styleUrls: ['./lists-datails.page.scss'],
+  providers: [ListaService]
 })
 export class ListsDatailsPage implements OnInit {
-  data = [
-    {
-      name: "Lucas Silva",
-      situacao: true,
-      vai: true,
-      volta: true,
-      vaiEvolta: true
-    },
-    {
-      name: "Lucas Silva",
-      situacao: true,
-      vai: true,
-      volta: true,
-      vaiEvolta: true
-    }
-  ]
+  public data: Usuariolista[] = []
+  Id = "617d37512c5c6e8114deec2d"
   constructor(
+    private listaServices: ListaService,
     public alertController: AlertController,
     public actionSheetController: ActionSheetController
     ) { }
 
-  ngOnInit() {
+  ngOnInit() {    
+  }
+
+
+  ngAfterViewInit() {
+    this.Users()
+  }
+  async Users(){
+    await this.listaServices.getListaId(this.Id).then((resposta: any)=>{
+      this.data = resposta.users
+    })
+  }
+
+  entrarLista(){
+    this.listaServices.getListaId(this.Id).then((resposta: any)=>{
+      console.log(resposta.users)
+    })
   }
 
   async presentActionSheet() {
@@ -99,7 +105,7 @@ export class ListsDatailsPage implements OnInit {
             if(data.length == 0)
               this.alerta("Uma opção deve ser selecionada...");
             //outras ações:
-            console.log(data)
+            this.entrarLista()
           }
         }
       ]
