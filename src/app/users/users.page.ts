@@ -9,15 +9,18 @@ import { User } from '../../Model/User.model';
   providers: [UsuarioService]
 })
 export class UsersPage implements OnInit {
+  tokenUser = localStorage.getItem('isAutenticado');
   data = []
   constructor(
     private usuarioService: UsuarioService
   ) { }
 
   ngOnInit() {
-    this.usuarioService.getUsuarios().then((resposta: any) => {
+    this.usuarioService.getUsuarios(this.tokenUser).toPromise().then((resposta: any) => {
       this.data = resposta.items
-      console.log(this.data)
+      console.log(resposta)
+    }).catch((err) => {
+      console.log(err.message)
     })
   }
 

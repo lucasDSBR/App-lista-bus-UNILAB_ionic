@@ -4,6 +4,11 @@
       <ion-icon slot="icon-only" name="person-circle"></ion-icon>
     </ion-button>
   </ion-buttons>
+  <ion-buttons slot="start" >
+    <ion-button [routerLink]="['', 'users']">
+      <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+    </ion-button>
+  </ion-buttons>
   <ion-title>Checklist Bus UNILAB</ion-title>
 </ion-toolbar>
 
@@ -49,11 +54,15 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-align-self-center">
-        <ion-item>
-          <ion-label>Genero</ion-label>
-          <ion-input formControlName="genero" name="genero"></ion-input>
-        </ion-item>
-      </ion-col>
+      <ion-item >
+        <ion-label>Genero</ion-label>
+        <ion-select placeholder="Selecione" formControlName="genero" name="genero">
+          <ion-select-option value="Feminino">Feminino</ion-select-option>
+          <ion-select-option value="Masculino">Masculino</ion-select-option>
+          <ion-select-option value="Outros">Outros</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="ion-align-self-center">
@@ -65,11 +74,14 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-align-self-center">
-        <ion-item>
-          <ion-label>Situação</ion-label>
-          <ion-input formControlName="situacao" name="situacao"></ion-input>
-        </ion-item>
-      </ion-col>
+      <ion-item  class="ion-align-self-center">
+        <ion-label>Situação</ion-label>
+        <ion-select placeholder="Selecione" formControlName="situacao" name="situacao">
+          <ion-select-option value="Ativo">Ativo</ion-select-option>
+          <ion-select-option value="Inativo">Inativo</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="ion-align-self-center">
