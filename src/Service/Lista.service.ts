@@ -31,7 +31,40 @@ export class ListaService {
         .then((resposta: any) => resposta.json())
     }
 
+    public delListaId(Id: any, tokenUser: any): Observable<any>{
+        let headers: Headers = new Headers();
+        headers.append('Authorization', `Bearer ${tokenUser}`);
+        headers.append('Content-Type', 'application/json');
+        return this.http.delete(
+            this.url_api+`/${Id}`,
+            new RequestOptions({headers: headers})
+            ).map((resposta: any) => resposta.json())
+    }
+
     public entrarNaLista(updateData, Id): Observable<any>{
+        let headers: Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.patch(
+            this.url_api+`/${Id}`,
+            JSON.stringify(updateData),
+            new RequestOptions({headers: headers}))
+            .map((resposta: any) => {
+                console.log("Resposta:"+resposta.json())
+            })
+    }
+
+    public editarSituacao(updateData, Id): Observable<any>{
+        let headers: Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.patch(
+            this.url_api+`/${Id}`,
+            JSON.stringify(updateData),
+            new RequestOptions({headers: headers}))
+            .map((resposta: any) => {
+                console.log("Resposta:"+resposta.json())
+            })
+    }
+    public sairDaListaId(updateData, Id): Observable<any>{
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
         return this.http.patch(

@@ -74,7 +74,7 @@ export class CreateListsPage implements OnInit {
         this.formulario.value.name,
         this.formulario.value.dataIda,
         this.formulario.value.dataVolta,
-        [null],
+        [],
         this.formulario.value.totalUsers,
         true
       )

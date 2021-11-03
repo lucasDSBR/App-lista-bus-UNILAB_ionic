@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { ListaService } from '../../Service/Lista.service';
 import { Usuariolista } from '../../Model/Usuariolista.model';
 import { ActivatedRoute } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { UserLista } from '../../Model/UserLista.model';
 @Component({
   selector: 'app-lists-datails',
@@ -11,48 +12,103 @@ import { UserLista } from '../../Model/UserLista.model';
   styleUrls: ['./lists-datails.page.scss'],
   providers: [ListaService]
 })
+
 export class ListsDatailsPage implements OnInit {
+  @Input() idLista: string;
+  @Input() tokenUser: string;
+  @Input() idUser: string;
+  @Input() NameUser: string;
+
   public data: Usuariolista[] = []
-  Id = "617d37512c5c6e8114deec2d"
   constructor(
     private listaServices: ListaService,
     public alertController: AlertController,
     public actionSheetController: ActionSheetController,
+    public modalController: ModalController,
     private route: ActivatedRoute
     ) { }
 
-  ngOnInit() {    
+  ngOnInit() { 
+    console.log(this.idLista)
+    console.log(this.tokenUser)   
+  }
+
+  sairDetalheLista() {
+    this.modalController.dismiss({
+      'dismissed': true
+    });
   }
 
 
   ngAfterViewInit() {
-    this.listaServices.getListaId(this.Id).then((resposta: any)=>{
-      this.data = resposta.users
+    this.listaServices.getListaId(this.idLista)
+    .then((resposta: any)=>{
+        this.data = resposta.users
+        console.log(this.data)
     })
   }
 
   entrarLista(acoes: any){
-    this.listaServices.getListaId(this.Id).then((resposta: any)=>{
+    this.listaServices.getListaId(this.idLista).then((resposta: any)=>{
       this.inserirUsuarioNaLista(resposta.users, acoes)
+    })
+  }
+
+  sairDaLista(){
+    var usuariosNaLista = this.data
+    const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
+    const index = usuariosNaLista.indexOf(user)
+    if (index > -1) {
+      usuariosNaLista.splice(index, 1);
+    }
+
+    let data = {users: usuariosNaLista}
+    this.listaServices.sairDaListaId(data, this.idLista)
+    .toPromise().then((resposta: any) => {
+      console.log(resposta)
+    }).catch((err) => {
+      console.log(err.message)
+    })
+  }
+
+  editarSituacaoUsuario(acoes: any){
+    var usuariosNaLista = this.data
+    const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
+    const index = usuariosNaLista.indexOf(user)
+    if (index > -1) {
+      usuariosNaLista.splice(index, 1);
+    }
+    usuariosNaLista.push({
+      name: this.NameUser,
+      idPrincipal: this.idUser,
+      vai: acoes[0] == 1? true : false,
+      volta: acoes[1] == 2? true : acoes[0] == 2? true : false,
+      situacao: true
+    })
+
+    console.log(usuariosNaLista)
+
+    let data = {users: usuariosNaLista}
+    this.listaServices.editarSituacao(data, this.idLista)
+    .toPromise().then((resposta: any) => {
+      console.log(resposta)
+    }).catch((err) => {
+      console.log(err.message)
     })
   }
 
   inserirUsuarioNaLista(users: any, acoes){
     users.push(
       {
-        name: "Lucas Silva2", 
-        idPrincipal: "423423", 
+        name: this.NameUser, 
+        idPrincipal: this.idUser, 
         situacao: true, 
         vai: acoes[0] == 1? true : false,
         volta: acoes[1] == 2? true : acoes[0] == 2? true : false,
       }
     );
-
-    let teste = {users: users}
-
-
-    console.log(teste)
-    this.listaServices.entrarNaLista(teste, this.Id)
+    let data = {users: users}
+    this.listaServices.entrarNaLista(data, this.idLista)
     .toPromise().then((resposta: any) => {
       console.log(resposta)
     }).catch((err) => {
@@ -69,21 +125,47 @@ export class ListsDatailsPage implements OnInit {
         handler: () => {
           this.entrarNaLista();
         }
-      }, {
+      }, 
+      {
         text: 'Editar situação',
         handler: () => {
           this.editarSituacao()
+        
         }
-      }, {
+      },
+      {
+        text: 'Excluir lista',
+        handler: () => {
+          this.excluirLista()
+        }
+      }, 
+      {
         text: 'Sair da lista',
         handler: () => {
-          console.log('Play clicked');
+          this.confirmacaoSairLista();
         }
       }]
     });
     await actionSheet.present();
   }
-
+  async confirmacaoSairLista(){
+    const alerta = await this.alertController.create({
+      header: "Deseja realmente sair da lista ?",
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.sairDaLista()
+          }
+        }
+      ]
+    });
+    await alerta.present();
+  }
   async alerta(mensagem: string){
     const alerta = await this.alertController.create({
       header: mensagem,
@@ -111,7 +193,7 @@ export class ListsDatailsPage implements OnInit {
           label: 'Volto para Pentecoste',
           name: 'Volto',
           type: 'checkbox',
-          value: 1
+          value: 2
         }
       ],
       buttons: [
@@ -124,11 +206,11 @@ export class ListsDatailsPage implements OnInit {
           }
         }, {
           text: 'Confirmar',
-          handler: (data) => {
-            if(data.length == 0)
+          handler: (acoes) => {
+            if(acoes.length == 0)
               this.alerta("Uma opção deve ser selecionada...");
             //outras ações:
-            this.entrarLista("asd")
+            this.editarSituacaoUsuario(acoes)
           }
         }
       ]
@@ -176,4 +258,16 @@ export class ListsDatailsPage implements OnInit {
     await confirmacao.present()
   }
 
+
+  excluirLista(){
+    this.listaServices.delListaId(this.idLista, this.tokenUser)
+        .toPromise().then((resposta: any) => {
+          if(resposta == null){
+            this.sairDetalheLista()
+            this.alerta('Lista excluida com sucesso!');
+          }
+        }).catch((err) => {
+          console.log(err.message)
+        })
+  }
 }

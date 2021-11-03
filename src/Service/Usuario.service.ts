@@ -38,4 +38,24 @@ export class UsuarioService {
             new RequestOptions({headers: headers})
             ).map((resposta: any) => resposta.json())
     }
+
+    public getUsuarioId(Id: any, token: any): Observable<any>{
+        let headers: Headers = new Headers();
+        headers.append('Authorization', `Bearer ${token}`);
+        headers.append('Content-Type', 'application/json');
+        return this.http.get(
+            this.url_api+`/${Id}`,
+            new RequestOptions({headers: headers})
+            ).map((resposta: any) => resposta.json())
+    }
+
+    public delUsuarioId(Id: any, token: any): Observable<any>{
+        let headers: Headers = new Headers();
+        headers.append('Authorization', `Bearer ${token}`);
+        headers.append('Content-Type', 'application/json');
+        return this.http.delete(
+            this.url_api+`/${Id}`,
+            new RequestOptions({headers: headers})
+            ).map((resposta: any) => resposta.json())
+    }
 }
