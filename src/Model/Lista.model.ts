@@ -1,8 +1,11 @@
 export class Lista {
-    name: String
-    dataIda: String
-    dataVolta: String
-    users: [object]
-    situacao: boolean
+    constructor(
+        public name: String,
+        public dataIda: Date,
+        public dataVolta: Date,
+        public users: [object],
+        public totalUsers: number,
+        public situacao: boolean
+    ){}
 }
 

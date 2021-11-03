@@ -14,59 +14,93 @@
       <h1>Cadastrar Usuarios</h1>
     </ion-col>
   </ion-row>
-  <ion-row>
-    <ion-col class="ion-align-self-center">
-      <ion-item>
-        <ion-label>Nome</ion-label>
-        <ion-input></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class="ion-align-self-center">
-      <ion-item>
-        <ion-label>Curso</ion-label>
-        <ion-input placeholder="Engenharia da Computação"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class="ion-align-self-center">
-      <ion-item>
-        <ion-label>Instituição</ion-label>
-        <ion-input placeholder="Ex: UNILAB"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class="ion-align-self-center">
-      <ion-item>
-        <ion-label>E-mail</ion-label>
-        <ion-input></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class="ion-align-self-center">
-      <ion-item>
-        <ion-label>Senha</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class="ion-align-self-center">
-      <ion-item>
-        <ion-label>Confirmar Senha</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <ion-button expand="block">Cadastrar</ion-button>
-    </ion-col>
-  </ion-row>
+  <form novalidade [formGroup]="formulario" (ngSubmit)="confirmarCadastro();">
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Nome</ion-label>
+          <ion-input formControlName="name" name="name"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Curso</ion-label>
+          <ion-input placeholder="Engenharia da Computação" formControlName="curso" name="curso"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Instituição</ion-label>
+          <ion-input placeholder="Ex: UNILAB" formControlName="instituicao" name="instituicao"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>E-mail</ion-label>
+          <ion-input formControlName="email" name="email"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Genero</ion-label>
+          <ion-input formControlName="genero" name="genero"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Cidade</ion-label>
+          <ion-input formControlName="cidade" name="cidade"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Situação</ion-label>
+          <ion-input formControlName="situacao" name="situacao"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Tipo de Usuario</ion-label>
+          <ion-input formControlName="profiles" name="profiles"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Senha</ion-label>
+          <ion-input type="password" formControlName="password" name="password"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <ion-item>
+          <ion-label>Confirmar Senha</ion-label>
+          <ion-input type="password" name="ConfirmSenha"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" type="submit">Cadastrar</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-grid>
 
 </ion-content>

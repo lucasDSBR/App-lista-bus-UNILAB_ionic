@@ -3,6 +3,8 @@ import { ActionSheetController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { ListaService } from '../../Service/Lista.service';
 import { Usuariolista } from '../../Model/Usuariolista.model';
+import { ActivatedRoute } from '@angular/router';
+import { UserLista } from '../../Model/UserLista.model';
 @Component({
   selector: 'app-lists-datails',
   templateUrl: './lists-datails.page.html',
@@ -15,7 +17,8 @@ export class ListsDatailsPage implements OnInit {
   constructor(
     private listaServices: ListaService,
     public alertController: AlertController,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    private route: ActivatedRoute
     ) { }
 
   ngOnInit() {    
@@ -23,17 +26,37 @@ export class ListsDatailsPage implements OnInit {
 
 
   ngAfterViewInit() {
-    this.Users()
-  }
-  async Users(){
-    await this.listaServices.getListaId(this.Id).then((resposta: any)=>{
+    this.listaServices.getListaId(this.Id).then((resposta: any)=>{
       this.data = resposta.users
     })
   }
 
-  entrarLista(){
+  entrarLista(acoes: any){
     this.listaServices.getListaId(this.Id).then((resposta: any)=>{
-      console.log(resposta.users)
+      this.inserirUsuarioNaLista(resposta.users, acoes)
+    })
+  }
+
+  inserirUsuarioNaLista(users: any, acoes){
+    users.push(
+      {
+        name: "Lucas Silva2", 
+        idPrincipal: "423423", 
+        situacao: true, 
+        vai: acoes[0] == 1? true : false,
+        volta: acoes[1] == 2? true : acoes[0] == 2? true : false,
+      }
+    );
+
+    let teste = {users: users}
+
+
+    console.log(teste)
+    this.listaServices.entrarNaLista(teste, this.Id)
+    .toPromise().then((resposta: any) => {
+      console.log(resposta)
+    }).catch((err) => {
+      console.log(err.message)
     })
   }
 
@@ -88,7 +111,7 @@ export class ListsDatailsPage implements OnInit {
           label: 'Volto para Pentecoste',
           name: 'Volto',
           type: 'checkbox',
-          value: 2
+          value: 1
         }
       ],
       buttons: [
@@ -105,7 +128,7 @@ export class ListsDatailsPage implements OnInit {
             if(data.length == 0)
               this.alerta("Uma opção deve ser selecionada...");
             //outras ações:
-            this.entrarLista()
+            this.entrarLista("asd")
           }
         }
       ]
@@ -144,7 +167,7 @@ export class ListsDatailsPage implements OnInit {
             if(data.length == 0)
               this.alerta("Uma opção deve ser selecionada...");
             //outras ações:
-            console.log(data)
+            this.entrarLista(data)
           }
         }
       ]

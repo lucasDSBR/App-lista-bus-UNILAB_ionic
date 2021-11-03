@@ -16,9 +16,20 @@ const routes: Routes = [
     loadChildren: () => import('./lists/lists.module').then( m => m.ListsPageModule)
   },
   {
+    path: 'lists',
+    redirectTo: 'lists',
+    pathMatch: 'full'
+  },
+  {
     path: 'lists-datails',
     loadChildren: () => import('./lists-datails/lists-datails.module').then( m => m.ListsDatailsPageModule)
   },
+  {
+    path: 'lists-datails',
+    redirectTo: 'lists-datails',
+    pathMatch: 'full'
+  },
+  
   {
     path: 'create-lists',
     loadChildren: () => import('./create-lists/create-lists.module').then( m => m.CreateListsPageModule)
