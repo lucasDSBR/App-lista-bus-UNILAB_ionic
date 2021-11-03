@@ -29,8 +29,14 @@
         <ion-col>
           <ion-label class="ion-text-wrap">
             <ion-text>
-              <h2>{{item.vai}}</h2>
-              <h2>{{item.volta}}</h2>
+              <ion-row>
+                <ion-col>
+                  <img id="imgswipe" src="../../assets/ir.png" *ngIf="item.vai"/>
+                </ion-col>
+                <ion-col>
+                  <img id="imgswipe" src="../../assets/voltar.png" *ngIf="item.volta"/>
+                </ion-col>
+              </ion-row>
             </ion-text>
           </ion-label>
         </ion-col>
