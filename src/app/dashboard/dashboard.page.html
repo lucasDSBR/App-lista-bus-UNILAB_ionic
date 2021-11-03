@@ -11,13 +11,13 @@
     <ion-row>
       <ion-col class="ion-align-self-center">
         <ion-card id="cardBtn">
-          <ion-item href="#" class="ion-activated">
+          <ion-item class="ion-activated">
             <ion-card-title>Lista da Semana</ion-card-title>
           </ion-item>
           <ion-card-content>
             Nesta opção, você pode visualizar a lista que está ativa e realizar algumas ações. Por exemplo: Entrar na lista da semana, editar a "ação"(Vai para redenção, Volta de redenção) e sair da lista.
           </ion-card-content>
-          <ion-item href="#" class="ion-activated" detail>
+          <ion-item [routerLink]="['', 'lists']" class="ion-activated" detail>
             <ion-label color="primary">Começar</ion-label>
           </ion-item>
         </ion-card>
@@ -26,13 +26,13 @@
     <ion-row>
       <ion-col class="ion-align-self-center">
         <ion-card id="cardBtn">
-          <ion-item href="#" class="ion-activated">
+          <ion-item class="ion-activated">
             <ion-card-title>Usuarios</ion-card-title>
           </ion-item>
           <ion-card-content>
             Nesta opção, você pode visualizar os usuários cadastrados no sistema e realizar algumas ações. Por exemplo: Editar, excluir e cadastrar.
           </ion-card-content>
-          <ion-item href="#" class="ion-activated" detail>
+          <ion-item [routerLink]="['', 'users']" class="ion-activated" detail>
             <ion-label color="primary">Começar</ion-label>
           </ion-item>
         </ion-card>
@@ -41,13 +41,13 @@
     <ion-row>
       <ion-col class="ion-align-self-center">
         <ion-card id="cardBtn">
-          <ion-item href="#" class="ion-activated">
+          <ion-item class="ion-activated">
             <ion-card-title>Nova Lista</ion-card-title>
           </ion-item>
           <ion-card-content>
             Nesta opção, você pode cadastrar um nova lista para uma determinada semana.
           </ion-card-content>
-          <ion-item href="#" class="ion-activated" detail>
+          <ion-item [routerLink]="['', 'create-lists']" class="ion-activated" detail>
             <ion-label color="primary">Começar</ion-label>
           </ion-item>
         </ion-card>

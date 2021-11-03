@@ -4,11 +4,16 @@
       <ion-icon slot="icon-only" name="person-circle"></ion-icon>
     </ion-button>
   </ion-buttons>
+  <ion-buttons slot="start">
+    <ion-button [routerLink]="['', 'dashboard']">
+      <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+    </ion-button>
+  </ion-buttons>
   <ion-title>Checklist Bus UNILAB</ion-title>
 </ion-toolbar>
 
 <ion-content>
-  <ion-item *ngFor="let item of data" detail href="#">
+  <ion-item *ngFor="let item of data" detail [routerLink]="['/lists-datails']">
     <ion-label class="ion-text-wrap">
       <ion-text color="primary">
         <h2>{{item.name}}</h2>

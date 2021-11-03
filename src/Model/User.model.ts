@@ -1,12 +1,14 @@
 export class User {
-    name: String
-    email: String
-    password: String
-    instituicao: String
-    curso: String
-    genero: String
-    cidade: String
-    situacao: boolean
-    profiles: String[]
+    constructor(
+        public name: String,
+        public email: String,
+        public password: String,
+        public instituicao: String,
+        public curso: String,
+        public genero: String,
+        public cidade: String,
+        public situacao: boolean,
+        public profiles: String[]
+    ){}
 }
 

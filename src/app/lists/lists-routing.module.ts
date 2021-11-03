@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ListsPage } from './lists.page';
+import { AutenticacaoGuard } from '../../Service/autenticacao-guard.service';
 
 const routes: Routes = [
   {
     path: '',
-    component: ListsPage
+    component: ListsPage,
+    canActivate: [AutenticacaoGuard]
   }
 ];
 

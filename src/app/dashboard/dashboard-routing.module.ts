@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardPage } from './dashboard.page';
-
+import { AutenticacaoGuard } from '../../Service/autenticacao-guard.service';
 const routes: Routes = [
   {
     path: '',
-    component: DashboardPage
+    component: DashboardPage,
+    canActivate: [AutenticacaoGuard]
   }
 ];
 
