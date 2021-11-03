@@ -4,11 +4,12 @@ import { Lista } from '../../Model/Lista.model';
 import { ListaService } from '../../Service/Lista.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { LoginService } from '../../Service/Login.service';
 @Component({
   selector: 'app-create-lists',
   templateUrl: './create-lists.page.html',
   styleUrls: ['./create-lists.page.scss'],
-  providers: [ListaService]
+  providers: [ListaService, LoginService]
 })
 export class CreateListsPage implements OnInit {
   tokenUser = localStorage.getItem('isAutenticado');
@@ -18,6 +19,7 @@ export class CreateListsPage implements OnInit {
   dataVolta: any;
   totalDePessoas: number;
   constructor(
+    private loginService: LoginService,
     private router: Router,
     public alertController: AlertController,
     private listaService: ListaService
@@ -105,4 +107,7 @@ export class CreateListsPage implements OnInit {
     this.router.navigate(['/dashboard'])
   }
  
+  sair(){
+    this.loginService.sair();
+  }
 }
