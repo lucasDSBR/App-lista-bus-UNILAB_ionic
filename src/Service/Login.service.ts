@@ -30,10 +30,12 @@ export class LoginService {
             ).map((resposta: any) => {
                 this.token_id = resposta.json().accessToken
                 this.id = resposta.json().id
-                this.router.navigate(['/dashboard'])
-                console.log("ok")
-                localStorage.setItem('id', this.id)
-                localStorage.setItem('isAutenticado', this.token_id)
+                if(this.token_id != undefined){
+                    this.router.navigate(['', 'dashboard'])
+                    console.log("ok")
+                    localStorage.setItem('id', this.id)
+                    localStorage.setItem('isAutenticado', this.token_id)
+                }
                 
             })
     }
@@ -48,6 +50,7 @@ export class LoginService {
     }
     public sair(): void{
         localStorage.removeItem('isAutenticado')
-        this.router.navigate(['/'])
+        localStorage.removeItem('id')
+        this.router.navigate(['', 'login'])
     }
 }

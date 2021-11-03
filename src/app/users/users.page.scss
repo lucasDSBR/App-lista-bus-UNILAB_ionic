@@ -7,11 +7,6 @@ ion-toolbar{
     color: #fff;
     
 }
-ion-avatar{
-    width: 20px;
-    height: 20px;
-}
-
 ion-content {
     font-family: 'Open Sans', arial, sans-serif;
     font-size: 14px;
@@ -20,4 +15,8 @@ ion-content {
 }
 #titul{
     padding: 30px;
+}
+ion-button{
+    --background: #6959CD;
+    color: #fff;
 }
