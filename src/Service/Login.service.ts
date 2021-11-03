@@ -14,6 +14,7 @@ export class LoginService {
     private url_api = URL_API_AUTENTICACAO;
     public isAutenticado: boolean;
     public id: string;
+    public nameUser: string;
     public token_id: string
 
     constructor(
@@ -28,13 +29,16 @@ export class LoginService {
             JSON.stringify(logindata),
             new RequestOptions({headers: headers})
             ).map((resposta: any) => {
-                this.token_id = resposta.json().accessToken
-                this.id = resposta.json().id
+                this.token_id = resposta.json().accessToken;
+                this.nameUser = resposta.json().name;
+                this.id = resposta.json().id;
                 if(this.token_id != undefined){
                     this.router.navigate(['', 'dashboard'])
                     console.log("ok")
                     localStorage.setItem('id', this.id)
                     localStorage.setItem('isAutenticado', this.token_id)
+                    localStorage.setItem('name', this.nameUser)
+
                 }
                 
             })
@@ -49,6 +53,7 @@ export class LoginService {
         }
     }
     public sair(): void{
+        localStorage.removeItem('name')
         localStorage.removeItem('isAutenticado')
         localStorage.removeItem('id')
         this.router.navigate(['', 'login'])

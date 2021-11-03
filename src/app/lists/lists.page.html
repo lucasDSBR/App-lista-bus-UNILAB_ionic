@@ -8,12 +8,12 @@
 </ion-toolbar>
 
 <ion-content>
-  <ion-item *ngFor="let item of data" detail [routerLink]="['/lists-datails']">
+  <ion-item *ngFor="let item of data" detail (click)="presentModal(item._id);">
     <ion-label class="ion-text-wrap">
       <ion-text color="primary">
         <h2>{{item.name}}</h2>
       </ion-text>
-      <p>Ida: {{item.dataIda}}</p>
+      <p>Ida: {{item._id}}</p>
       <p>Retorno: {{item.dataVolta}}</p>
     </ion-label>
   </ion-item>
