@@ -15,6 +15,7 @@ export class LoginService {
     public isAutenticado: boolean;
     public id: string;
     public nameUser: string;
+    public perfil: string;
     public token_id: string
 
     constructor(
@@ -31,13 +32,16 @@ export class LoginService {
             ).map((resposta: any) => {
                 this.token_id = resposta.json().accessToken;
                 this.nameUser = resposta.json().name;
+                this.perfil = resposta.json().perfil[0];
                 this.id = resposta.json().id;
                 if(this.token_id != undefined){
+                    console.log(resposta)
                     this.router.navigate(['', 'dashboard'])
                     console.log("ok")
                     localStorage.setItem('id', this.id)
                     localStorage.setItem('isAutenticado', this.token_id)
                     localStorage.setItem('name', this.nameUser)
+                    localStorage.setItem('perfil', this.perfil)
 
                 }
                 

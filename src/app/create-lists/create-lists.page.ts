@@ -12,6 +12,8 @@ import { LoginService } from '../../Service/Login.service';
   providers: [ListaService, LoginService]
 })
 export class CreateListsPage implements OnInit {
+
+  perfil = localStorage.getItem('perfil');
   tokenUser = localStorage.getItem('isAutenticado');
   customPickerOptionsIda: any;
   dataIda: any;

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Login } from '../../Model/Login.model';
 import { LoginService } from '../../Service/Login.service';
+import { AlertController } from '@ionic/angular';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -10,17 +11,16 @@ import { LoginService } from '../../Service/Login.service';
 })
 export class LoginPage {
   slideOpts = {
-    initialSlide: 2
+    initialSlide: 0
   }
   public formLogin: FormGroup = new FormGroup({
     'email': new FormControl(null, [Validators.required]),
     'password': new FormControl(null, [Validators.required])
   });
   constructor(
+    public alertController: AlertController,
     private loginService: LoginService
   ) {}
-
-
   confirmarCadastro(): void{
     if(this.formLogin.status === "INVALID"){
       this.formLogin.get('email').markAsTouched()
@@ -33,10 +33,24 @@ export class LoginPage {
       )
       this.loginService.login(dataUser)
       .toPromise().then((resposta: any) => {
-        console.log(resposta)
+        console.log("ok")
       }).catch((err) => {
-        console.log(err.message)
+        this.presentAlert()
       })
     }
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Erro',
+      message: 'Dados incorretos...',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
   }
 }

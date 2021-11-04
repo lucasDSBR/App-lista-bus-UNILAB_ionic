@@ -42,11 +42,11 @@
         <form novalidade [formGroup]="formLogin" (ngSubmit)="confirmarCadastro()">
           <ion-row>
             <ion-col>
-              <ion-item>
+              <ion-item  id="email">
                 <ion-label position="floating">E-mail</ion-label>
                 <ion-input formControlName="email" name="email"></ion-input>
               </ion-item>
-              <ion-item>
+              <ion-item id="password">
                 <ion-label position="floating">Senha</ion-label>
                 <ion-input type="password" formControlName="password" name="password"></ion-input>
               </ion-item>
@@ -54,7 +54,7 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-button color="light" type="submit">Entrar</ion-button>
+              <ion-button color="light" type="submit" shape="round">Entrar</ion-button>
             </ion-col>
           </ion-row>
         </form>

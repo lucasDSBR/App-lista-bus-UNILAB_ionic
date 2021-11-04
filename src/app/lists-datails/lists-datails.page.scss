@@ -12,3 +12,10 @@ ion-button{
     --background: #6959CD;
     color: #fff;
 }
+
+.alertCancel{
+    --background: red;
+      button.alertButton{
+        color: white;
+      }
+   }

@@ -30,10 +30,6 @@ export class UsersDetailsPage implements OnInit {
     });
   }
   ngOnInit() {
-    console.log(this.id)
-  }
-
-  ngAfterViewInit(){
     this.usuarioService.getUsuarioId(this.id, this.tokenUser)
     .toPromise().then((resposta: any) => {
       this.data = resposta
@@ -41,6 +37,7 @@ export class UsersDetailsPage implements OnInit {
       console.log(err.message)
     })
   }
+
 
   async confirmarExclusao(){
     const editSituacao = await this.alertController.create({

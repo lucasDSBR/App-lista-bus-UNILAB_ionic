@@ -32,6 +32,8 @@ export class UsersPage implements OnInit {
 
 
   ngOnInit() {
+  }
+  ionViewWillEnter() {
     this.usuarioService.getUsuarios(this.tokenUser).toPromise().then((resposta: any) => {
       this.data = resposta.items
       console.log(resposta)
