@@ -1,6 +1,6 @@
 <ion-toolbar>
   <ion-buttons slot="start">
-    <ion-button (click)="sairDetalheLista();">
+    <ion-button [routerLink]="['', 'lists']" (click)="sairDetalheLista();">
       <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
     </ion-button>
   </ion-buttons>
@@ -22,7 +22,7 @@
         <ion-col>
           <ion-label class="ion-text-wrap">
             <ion-text>
-              <h2>{{item.situacao == true? 'Ok': 'Cancel.'}}</h2>
+              <ion-badge color="success" *ngIf="item.idPrincipal == idUser">Você</ion-badge>
             </ion-text>
           </ion-label>
         </ion-col>
@@ -45,5 +45,5 @@
   </ion-item>
 </ion-content>
 <ion-card>
-  <ion-button expand="block" (click)="presentActionSheet()">Opções</ion-button>
+  <ion-button expand="block" (click)="presentActionSheet()" shape="round">Opções</ion-button>
 </ion-card>

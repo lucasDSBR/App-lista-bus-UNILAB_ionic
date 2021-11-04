@@ -14,4 +14,13 @@ ion-content {
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
+}
+ion-slides {
+    font-family: 'Open Sans', arial, sans-serif;
+    height:45%;
+    background-color: #6959CD;
+    color: #fff;
+}
+ion-button{
+    --background: #6959CD;
+}

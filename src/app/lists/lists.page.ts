@@ -9,16 +9,24 @@ import { ModalController } from '@ionic/angular';
   providers:[ListaService]
 })
 export class ListsPage implements OnInit {
+  slideOpts = {
+    initialSlide: 0
+  }
   tokenUser = localStorage.getItem('isAutenticado');
   idUser = localStorage.getItem('id');
   NameUser = localStorage.getItem('name');
   data = []
+
+
   constructor(
     public modalController: ModalController,
     private listaServices: ListaService
   ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
     this.listaServices.getLista().then((resposta: any) => {
       this.data = resposta.items
       console.log(this.data)

@@ -6,6 +6,8 @@ import { Usuariolista } from '../../Model/Usuariolista.model';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { UserLista } from '../../Model/UserLista.model';
+import { ListsPage } from '../lists/lists.page';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-lists-datails',
   templateUrl: './lists-datails.page.html',
@@ -19,8 +21,14 @@ export class ListsDatailsPage implements OnInit {
   @Input() idUser: string;
   @Input() NameUser: string;
 
+
+  perfil = localStorage.getItem('perfil');
+
+  public listsPage: ListsPage;
+  public totalUsers: number;
   public data: Usuariolista[] = []
   constructor(
+    private router: Router,
     private listaServices: ListaService,
     public alertController: AlertController,
     public actionSheetController: ActionSheetController,
@@ -28,24 +36,24 @@ export class ListsDatailsPage implements OnInit {
     private route: ActivatedRoute
     ) { }
 
-  ngOnInit() { 
-    console.log(this.idLista)
-    console.log(this.tokenUser)   
+
+
+  ngOnInit() {
+
+  }
+
+  ionViewWillEnter() {
+    this.listaServices.getListaId(this.idLista)
+    .then((resposta: any)=>{
+        this.data = resposta.users
+        console.log(resposta)
+    })
   }
 
   sairDetalheLista() {
     this.modalController.dismiss({
       'dismissed': true
     });
-  }
-
-
-  ngAfterViewInit() {
-    this.listaServices.getListaId(this.idLista)
-    .then((resposta: any)=>{
-        this.data = resposta.users
-        console.log(this.data)
-    })
   }
 
   entrarLista(acoes: any){
@@ -65,7 +73,7 @@ export class ListsDatailsPage implements OnInit {
     let data = {users: usuariosNaLista}
     this.listaServices.sairDaListaId(data, this.idLista)
     .toPromise().then((resposta: any) => {
-      console.log(resposta)
+      this.ionViewWillEnter()
     }).catch((err) => {
       console.log(err.message)
     })
@@ -110,7 +118,7 @@ export class ListsDatailsPage implements OnInit {
     let data = {users: users}
     this.listaServices.entrarNaLista(data, this.idLista)
     .toPromise().then((resposta: any) => {
-      console.log(resposta)
+      this.ionViewWillEnter()
     }).catch((err) => {
       console.log(err.message)
     })
@@ -119,24 +127,32 @@ export class ListsDatailsPage implements OnInit {
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Opções',
+      cssClass: 'alertCancel',
       buttons: [{
         text: 'Entrar na lista',
         role: 'destructive',
         handler: () => {
-          this.entrarNaLista();
+          if(this.data.length == this.totalUsers){
+            this.alerta('Desculpe. Alista já está com o limite de usuários...');
+          }else{
+            this.entrarNaLista();
+          }
         }
       }, 
       {
         text: 'Editar situação',
         handler: () => {
           this.editarSituacao()
-        
         }
       },
       {
-        text: 'Excluir lista',
+        text: 'Excluir lista(Admin)',
         handler: () => {
-          this.excluirLista()
+          if(this.perfil == 'admin'){
+            this.excluirLista()
+          }else{
+            this.alerta('Desculpe. Apenas administradores podem realizar essa ação.');
+          }
         }
       }, 
       {
@@ -169,10 +185,15 @@ export class ListsDatailsPage implements OnInit {
   async alerta(mensagem: string){
     const alerta = await this.alertController.create({
       header: mensagem,
+      cssClass: 'alertDanger',
       buttons: [
         {
           text: 'Ok',
           role: 'cancel',
+          handler: () =>{
+            this.router.navigate(['', 'dashboard'])
+          },
+          cssClass: 'alertDanger'
         }
       ]
     });
@@ -263,8 +284,9 @@ export class ListsDatailsPage implements OnInit {
     this.listaServices.delListaId(this.idLista, this.tokenUser)
         .toPromise().then((resposta: any) => {
           if(resposta == null){
-            this.sairDetalheLista()
             this.alerta('Lista excluida com sucesso!');
+            this.sairDetalheLista()
+            
           }
         }).catch((err) => {
           console.log(err.message)

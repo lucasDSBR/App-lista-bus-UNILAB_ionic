@@ -7,6 +7,7 @@ import { LoginService } from '../../Service/Login.service';
   providers: [LoginService]
 })
 export class DashboardPage implements OnInit {
+  perfil = localStorage.getItem('perfil');
   constructor(
     private loginService: LoginService
   ) { }

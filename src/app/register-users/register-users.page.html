@@ -82,7 +82,10 @@
       <ion-col class="ion-align-self-center">
         <ion-item>
           <ion-label>Tipo de Usuario</ion-label>
-          <ion-input formControlName="profiles" name="profiles"></ion-input>
+        <ion-select placeholder="Selecione" formControlName="profiles" name="profiles">
+          <ion-select-option value="aluno">Aluno</ion-select-option>
+          <ion-select-option value="admin">Administrador</ion-select-option>
+        </ion-select>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -104,7 +107,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button expand="block" type="submit">Cadastrar</ion-button>
+        <ion-button expand="block" type="submit"  shape="round">Cadastrar</ion-button>
       </ion-col>
     </ion-row>
   </form>

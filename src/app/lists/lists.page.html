@@ -8,16 +8,66 @@
 </ion-toolbar>
 
 <ion-content>
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide>
+      <!--Inicio slide principal-->
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-card id="cardBtn">
+              <ion-item class="ion-activated">
+                <ion-card-title>Como finciona</ion-card-title>
+              </ion-item>
+              <ion-card-content>
+                <p>Apenas Administradores do sistema podem excluir uma lista...</p>
+                <p>Ao lado de cara usuário possui duas ou uma seta informando a situação do usuario</p>
+                <p>Obs: Seta para cima: VAI; Seta para baixo: VOLTA</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-card id="cardBtn">
+              <ion-item class="ion-activated">
+                <ion-card-title>Lista</ion-card-title>
+              </ion-item>
+              <ion-card-content>
+                Apenas administradores do sistema podem excluir ou criar listas...
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+
+
+
   <ion-item *ngFor="let item of data" detail (click)="presentModal(item._id);">
-    
     <ion-label class="ion-text-wrap">
       <ion-text color="primary">
         <h2>{{item.name}}</h2>
       </ion-text>
-      <p>Ida: {{item._id}}</p>
+      <p>Id: {{item._id}}</p>
       <p>Retorno: {{item.dataVolta}}</p>
     </ion-label>
     <ion-badge color="warning">{{item.users.length}}</ion-badge>
   </ion-item>
-</ion-content>
 
+  <ion-grid *ngIf="data.length == 0">
+    <ion-row>
+      <ion-col  class="ion-align-self-center">
+        <ion-label class="ion-text-wrap">
+          <p>Nenhuma lista foi encontrada. Clique em recarregar.</p>
+        </ion-label>
+        <ion-button  (click)="ngOnInit()" expand="full" shape="round">Recarregar</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

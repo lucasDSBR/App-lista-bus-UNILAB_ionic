@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { ListsDatailsPageRoutingModule } from './lists-datails-routing.module';
 
 import { ListsDatailsPage } from './lists-datails.page';
+import { ListsPage } from '../lists/lists.page';
 
 @NgModule({
   imports: [

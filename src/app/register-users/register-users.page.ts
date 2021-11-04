@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UsuarioService } from '../../Service/Usuario.service';
 import { User } from '../../Model/User.model';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register-users',
   templateUrl: './register-users.page.html',
@@ -9,6 +11,8 @@ import { User } from '../../Model/User.model';
   providers: [UsuarioService]
 })
 export class RegisterUsersPage{
+  tokenUser = localStorage.getItem('isAutenticado');
+
 
   public formulario: FormGroup = new FormGroup({
     'name': new FormControl(null, [Validators.required]),
@@ -22,6 +26,8 @@ export class RegisterUsersPage{
     'profiles': new FormControl(null, [Validators.required]),
   });
   constructor(
+    private router: Router,
+    public alertController: AlertController,
     private usuarioService: UsuarioService
   ) { }
 
@@ -48,13 +54,31 @@ export class RegisterUsersPage{
         this.formulario.value.situacao,
         this.formulario.value.profiles
       )
-      this.usuarioService.cadatroUsuario(dataUser)
+      this.usuarioService.cadatroUsuario(dataUser, this.tokenUser)
       .toPromise().then((resposta: any) => {
-        console.log(resposta)
+        this.alerta("Cadastro realizado com sucesso!", 'Usuário cadastrado com sucesso!... Você será encaminhado para a aba de usuários agora.')
       }).catch((err) => {
-        console.log(err.message)
+        this.alerta("Erro", "Ops.... algo não ocorreu como esperado. tente novamente mais tarde.  Você será encaminhado para a aba de usuários agora.")
       })
     }
+  }
+
+
+  async alerta(msg1: string, msg2: string){
+    const alerta = await this.alertController.create({
+      header: msg1,
+      message: msg2,
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'cancel',
+          handler: () => {
+            this.router.navigate(['/users'])
+          }
+        }
+      ]
+    });
+    await alerta.present();
   }
 
 }
