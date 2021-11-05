@@ -29,7 +29,6 @@ export class ListsPage implements OnInit {
   ionViewWillEnter() {
     this.listaServices.getLista().then((resposta: any) => {
       this.data = resposta.items
-      console.log(this.data)
     })
   }
 
