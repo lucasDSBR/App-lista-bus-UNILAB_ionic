@@ -33,7 +33,6 @@ export class LoginPage {
       )
       this.loginService.login(dataUser)
       .toPromise().then((resposta: any) => {
-        console.log("ok")
       }).catch((err) => {
         this.presentAlert()
       })
@@ -47,10 +46,6 @@ export class LoginPage {
       message: 'Dados incorretos...',
       buttons: ['OK']
     });
-
     await alert.present();
-
-    const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
   }
 }

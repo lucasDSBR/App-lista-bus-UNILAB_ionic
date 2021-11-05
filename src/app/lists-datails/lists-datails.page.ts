@@ -8,6 +8,7 @@ import { ModalController } from '@ionic/angular';
 import { UserLista } from '../../Model/UserLista.model';
 import { ListsPage } from '../lists/lists.page';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 @Component({
   selector: 'app-lists-datails',
   templateUrl: './lists-datails.page.html',
@@ -28,6 +29,7 @@ export class ListsDatailsPage implements OnInit {
   public totalUsers: number;
   public data: Usuariolista[] = []
   constructor(
+    public toastController: ToastController,
     private router: Router,
     private listaServices: ListaService,
     public alertController: AlertController,
@@ -46,7 +48,7 @@ export class ListsDatailsPage implements OnInit {
     this.listaServices.getListaId(this.idLista)
     .then((resposta: any)=>{
         this.data = resposta.users
-        console.log(resposta)
+        this.totalUsers = resposta.totalUsers
     })
   }
 
@@ -57,9 +59,15 @@ export class ListsDatailsPage implements OnInit {
   }
 
   entrarLista(acoes: any){
-    this.listaServices.getListaId(this.idLista).then((resposta: any)=>{
-      this.inserirUsuarioNaLista(resposta.users, acoes)
-    })
+    var usuariosNaLista = this.data
+    const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
+    if(user){
+      this.alerta("Você já está na lista lista.")
+    }else{
+      this.listaServices.getListaId(this.idLista).then((resposta: any)=>{
+        this.inserirUsuarioNaLista(resposta.users, acoes)
+      })
+    }
   }
 
   sairDaLista(){
@@ -74,6 +82,9 @@ export class ListsDatailsPage implements OnInit {
     this.listaServices.sairDaListaId(data, this.idLista)
     .toPromise().then((resposta: any) => {
       this.ionViewWillEnter()
+      if(resposta === undefined){
+        this.confirmacao("Você saiu da lista com sucesso!")
+      }
     }).catch((err) => {
       console.log(err.message)
     })
@@ -94,15 +105,23 @@ export class ListsDatailsPage implements OnInit {
       situacao: true
     })
 
-    console.log(usuariosNaLista)
-
     let data = {users: usuariosNaLista}
     this.listaServices.editarSituacao(data, this.idLista)
     .toPromise().then((resposta: any) => {
-      console.log(resposta)
+      if(resposta == undefined) {
+        this.confirmacao("Seus dados foram atualizados!")
+      }
     }).catch((err) => {
       console.log(err.message)
     })
+  }
+
+  async confirmacao(msg: string) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
   }
 
   inserirUsuarioNaLista(users: any, acoes){
@@ -127,13 +146,12 @@ export class ListsDatailsPage implements OnInit {
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Opções',
-      cssClass: 'alertCancel',
       buttons: [{
         text: 'Entrar na lista',
         role: 'destructive',
         handler: () => {
           if(this.data.length == this.totalUsers){
-            this.alerta('Desculpe. Alista já está com o limite de usuários...');
+            this.alerta('Desculpe. A lista já atingiu '+this.totalUsers+' pessoas.');
           }else{
             this.entrarNaLista();
           }
@@ -142,14 +160,20 @@ export class ListsDatailsPage implements OnInit {
       {
         text: 'Editar situação',
         handler: () => {
-          this.editarSituacao()
+          var usuariosNaLista = this.data
+          const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
+          if(!user){
+            this.alerta('Você ainda não entrou na lista.');
+          }else{
+            this.editarSituacao()
+          }
         }
       },
       {
         text: 'Excluir lista(Admin)',
         handler: () => {
           if(this.perfil == 'admin'){
-            this.excluirLista()
+            this.alertaExclusao("Quer realmente excluir a lista ?");
           }else{
             this.alerta('Desculpe. Apenas administradores podem realizar essa ação.');
           }
@@ -158,7 +182,14 @@ export class ListsDatailsPage implements OnInit {
       {
         text: 'Sair da lista',
         handler: () => {
-          this.confirmacaoSairLista();
+          var usuariosNaLista = this.data
+          const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
+          if(!user){
+            this.alerta('Você ainda não entrou na lista.');
+          }else{
+            this.confirmacaoSairLista();
+          }
+          
         }
       }]
     });
@@ -223,7 +254,6 @@ export class ListsDatailsPage implements OnInit {
           role: 'cancel',
           cssClass: 'my-custom-class',
           handler: () => {
-            console.log('Confirm Cancel');
           }
         }, {
           text: 'Confirmar',
@@ -262,7 +292,6 @@ export class ListsDatailsPage implements OnInit {
           role: 'cancel',
           cssClass: 'my-custom-class',
           handler: () => {
-            console.log('Confirm Cancel');
           }
         }, {
           text: 'Confirmar',
@@ -279,6 +308,27 @@ export class ListsDatailsPage implements OnInit {
     await confirmacao.present()
   }
 
+  async alertaExclusao(mensagem: string){
+    const alerta = await this.alertController.create({
+      header: mensagem,
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+          cssClass: 'my-custom-class',
+          handler: () => {
+          }
+        }, {
+          text: 'Sim',
+          handler: () => {
+            this.excluirLista()
+          }
+        }
+      ]
+    });
+    await alerta.present();
+  }
+
 
   excluirLista(){
     this.listaServices.delListaId(this.idLista, this.tokenUser)
@@ -286,7 +336,6 @@ export class ListsDatailsPage implements OnInit {
           if(resposta == null){
             this.alerta('Lista excluida com sucesso!');
             this.sairDetalheLista()
-            
           }
         }).catch((err) => {
           console.log(err.message)

@@ -36,6 +36,7 @@ export class CreateListsPage implements OnInit {
         text: 'Confirmar',
         handler: (data) => {
           this.dataIda = data
+          console.log(data)
         }
       }]
     };
@@ -74,8 +75,8 @@ export class CreateListsPage implements OnInit {
     }else{
       let dataList = new Lista(
         this.formulario.value.name,
-        this.formulario.value.dataIda,
-        this.formulario.value.dataVolta,
+        `${this.dataIda.day.text}/${this.dataIda.month.text}/${this.dataIda.year.text}`,
+        `${this.dataVolta.day.text}/${this.dataVolta.month.text}/${this.dataVolta.year.text}`,
         [],
         this.formulario.value.totalUsers,
         true
@@ -96,7 +97,7 @@ export class CreateListsPage implements OnInit {
     const alerta = await this.alertController.create({
       header: msg1,
       subHeader: msg2,
-      message: 'Lembre-se: Sempre que você quiser criar uma lista, terá que apagar a feita anteriormente(caso tenha)',
+      message: 'Lembre-se: Sempre que você quiser criar uma lista, terá que apagar a feita anteriormente.',
       buttons: [
         {
           text: 'Ok',

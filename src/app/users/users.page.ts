@@ -9,7 +9,7 @@ import { UsersDetailsPage } from '../users-details/users-details.page';
   styleUrls: ['./users.page.scss'],
   providers: [UsuarioService]
 })
-export class UsersPage implements OnInit {
+export class UsersPage {
   tokenUser = localStorage.getItem('isAutenticado');
   data = []
   constructor(
@@ -30,9 +30,6 @@ export class UsersPage implements OnInit {
     return await modal.present();
   }
 
-
-  ngOnInit() {
-  }
   ionViewWillEnter() {
     this.usuarioService.getUsuarios(this.tokenUser).toPromise().then((resposta: any) => {
       this.data = resposta.items

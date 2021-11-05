@@ -79,6 +79,7 @@ export class UsersDetailsPage implements OnInit {
       if(resposta == null){
         this.alerta('Usuário excluido com sucesso!');
         this.sairDoDetalhe()
+        this.router.navigate(['', 'dashboard'])
       }
     }).catch((err) => {
       console.log(err.message)

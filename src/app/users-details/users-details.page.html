@@ -28,9 +28,6 @@
       <p>E-mail: {{data.email}}</p>
       <p>Situação: {{data.situacao == true? 'Ativo': 'Inativo'}}</p>
     </ion-card-content>
-    <ion-item href="#" class="ion-activated">
-      <ion-label color="primary">Editar usuário</ion-label>
-    </ion-item>
     <ion-item (click)="confirmarExclusao();" class="ion-activated">
       <ion-label color="danger">Excluir usuário</ion-label>
     </ion-item>

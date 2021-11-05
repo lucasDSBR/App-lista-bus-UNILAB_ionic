@@ -8,12 +8,14 @@ import { LoginService } from '../../Service/Login.service';
 })
 export class DashboardPage implements OnInit {
   perfil = localStorage.getItem('perfil');
+  
   constructor(
     private loginService: LoginService
   ) { }
 
   ngOnInit() {
   }
+
 
   sair(){
     this.loginService.sair();
