@@ -6,3 +6,6 @@
  - ionic cordova platform add android@8.0.0
  - ionic cordova prepare android
  - ionic cordova build android
+
+ ## Atualiza Ícones:
+    - ionic cordova resources android
