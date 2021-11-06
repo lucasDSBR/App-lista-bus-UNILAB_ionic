@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-apk": "ionic cordova build android",
-    "update-apk": "ionic cordova resources android"
+    "update-icons-apk": "ionic cordova resources android"
   },
   "private": true,
   "dependencies": {

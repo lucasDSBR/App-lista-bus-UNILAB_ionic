@@ -11,7 +11,9 @@ import { UsersDetailsPage } from '../users-details/users-details.page';
 })
 export class UsersPage {
   tokenUser = localStorage.getItem('isAutenticado');
-  data = []
+  data = [];
+  loading = true;
+  semUser = false;
   constructor(
     public modalController: ModalController,
     private usuarioService: UsuarioService
@@ -33,7 +35,10 @@ export class UsersPage {
   ionViewWillEnter() {
     this.usuarioService.getUsuarios(this.tokenUser).toPromise().then((resposta: any) => {
       this.data = resposta.items
-      console.log(resposta)
+      this.loading = false
+      if(this.data.length == 0) {
+        this.semUser = true
+      }
     }).catch((err) => {
       console.log(err.message)
     })

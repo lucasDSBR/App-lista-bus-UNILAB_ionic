@@ -12,6 +12,24 @@
   <h1>Usuários</h1>
 </ion-label>
 <ion-content>
+
+
+  <ion-item *ngIf="loading">
+    <ion-label>Buscando usuários...</ion-label>
+    <ion-spinner name="crescent"></ion-spinner>
+  </ion-item>
+
+  <ion-grid *ngIf="semUser">
+    <ion-row>
+      <ion-col>
+        <ion-label class="ion-text-wrap">
+          <p>Nenhum usuário foi encontrado.</p>
+        </ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
   <ion-item *ngFor="let item of data" detail (click)="presentModal(item._id);">
     <ion-grid>
       <ion-row >

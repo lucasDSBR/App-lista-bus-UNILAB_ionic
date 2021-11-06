@@ -15,6 +15,8 @@ export class ListsPage implements OnInit {
   tokenUser = localStorage.getItem('isAutenticado');
   idUser = localStorage.getItem('id');
   NameUser = localStorage.getItem('name');
+  loading = true;
+  semUser = false;
   data = []
 
 
@@ -28,7 +30,13 @@ export class ListsPage implements OnInit {
 
   ionViewWillEnter() {
     this.listaServices.getLista().then((resposta: any) => {
+      this.loading = false;
       this.data = resposta.items
+      if(this.data.length == 0) {
+        this.semUser = true
+      }
+    }).catch((err) => {
+
     })
   }
 

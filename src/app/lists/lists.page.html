@@ -8,15 +8,19 @@
 </ion-toolbar>
 
 
-<ion-card id="cardBtn">
-  <ion-card-content>
-    <p>Apenas Administradores do sistema podem excluir uma lista...</p>
-    <p>Ao lado de cada usuário, há duas(ou uma) seta(s) informando a situação do usuário</p>
-    <p>Obs: Seta para cima: <ion-text color="success">VAI</ion-text>; Seta para baixo: <ion-text color="danger">VOLTA</ion-text></p>
-  </ion-card-content>
-</ion-card>
+
 
 <ion-content>
+  <ion-card id="cardBtn">
+    <ion-card-content>
+      <p>Apenas Administradores do sistema podem excluir uma lista...</p>
+      <p>Ao lado de cada usuário, há duas(ou uma) seta(s) informando a situação do usuário</p>
+      <p>Obs: Seta para cima: <ion-text color="success">VAI</ion-text>; Seta para baixo: <ion-text color="danger">VOLTA</ion-text></p>
+    </ion-card-content>
+  </ion-card>
+  
+
+  
   <ion-item *ngFor="let item of data" detail (click)="presentModal(item._id);">
     <ion-label class="ion-text-wrap">
       <ion-text color="primary">
@@ -31,14 +35,18 @@
     <ion-badge color="warning">{{item.users.length}}</ion-badge>
   </ion-item>
 
-  <ion-grid *ngIf="data.length == 0">
+
+  <ion-item *ngIf="loading">
+    <ion-label>Procurando listas...</ion-label>
+    <ion-spinner name="crescent"></ion-spinner>
+  </ion-item>
+
+  <ion-grid *ngIf="semUser">
     <ion-row>
-      <ion-col  class="ion-align-self-center">
-        
+      <ion-col>
         <ion-label class="ion-text-wrap">
-          <p>Nenhuma lista foi encontrada. Clique em recarregar.</p>
+          <p>Nenhuma lista foi encontrada.</p>
         </ion-label>
-        <ion-button  (click)="ngOnInit()" expand="full" shape="round">Recarregar</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
