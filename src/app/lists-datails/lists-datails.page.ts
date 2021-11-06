@@ -27,6 +27,7 @@ export class ListsDatailsPage implements OnInit {
 
   public listsPage: ListsPage;
   public totalUsers: number;
+  public limiteUsers: number;
   public data: Usuariolista[] = []
   constructor(
     public toastController: ToastController,
@@ -48,8 +49,10 @@ export class ListsDatailsPage implements OnInit {
     this.listaServices.getListaId(this.idLista)
     .then((resposta: any)=>{
         this.data = resposta.users
-        this.totalUsers = resposta.totalUsers
+        this.limiteUsers = resposta.totalUsers
+        this.totalUsers = this.data.length
     })
+    
   }
 
   sairDetalheLista() {
@@ -150,8 +153,8 @@ export class ListsDatailsPage implements OnInit {
         text: 'Entrar na lista',
         role: 'destructive',
         handler: () => {
-          if(this.data.length == this.totalUsers){
-            this.alerta('Desculpe. A lista já atingiu '+this.totalUsers+' pessoas.');
+          if(this.data.length == this.limiteUsers){
+            this.alerta('Desculpe. A lista já atingiu o limite de '+this.limiteUsers+' pessoa(s).');
           }else{
             this.entrarNaLista();
           }

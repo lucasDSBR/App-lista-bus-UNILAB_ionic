@@ -24,6 +24,7 @@ export class RegisterUsersPage{
     'cidade': new FormControl(null, [Validators.required]),
     'situacao': new FormControl(null, [Validators.required]),
     'profiles': new FormControl(null, [Validators.required]),
+    'confirmPassword': new FormControl(null),
   });
   constructor(
     private router: Router,
@@ -42,6 +43,8 @@ export class RegisterUsersPage{
       this.formulario.get('cidade').markAsTouched()
       this.formulario.get('situacao').markAsTouched()
       this.formulario.get('profiles').markAsTouched()
+      this.formulario.get('confirmPassword').markAsTouched()
+      
     }else{
       let dataUser = new User(
         this.formulario.value.name,
@@ -54,17 +57,22 @@ export class RegisterUsersPage{
         this.formulario.value.situacao,
         this.formulario.value.profiles
       )
-      this.usuarioService.cadatroUsuario(dataUser, this.tokenUser)
-      .toPromise().then((resposta: any) => {
-        this.alerta("Cadastro realizado com sucesso!", 'Usuário cadastrado com sucesso!... Você será encaminhado para a aba de usuários agora.')
-      }).catch((err) => {
-        this.alerta("Erro", "Ops.... algo não ocorreu como esperado. tente novamente mais tarde.  Você será encaminhado para a aba de usuários agora.")
-      })
+      if(dataUser.password != this.formulario.value.confirmPassword){
+        this.alerta("Dados inválidos", "Desculpe, mas as senhas informadas nos campos 'Senha' e 'Confirmar Senha' não são iguais. Para que seu cadastro seja concretizado, por favor informe valores iguais.", true)
+        
+      }else{
+        this.usuarioService.cadatroUsuario(dataUser, this.tokenUser)
+        .toPromise().then((resposta: any) => {
+          this.alerta("Cadastro realizado com sucesso!", 'Usuário cadastrado com sucesso!... Você será encaminhado para a aba de usuários agora.', false)
+        }).catch((err) => {
+          this.alerta("Erro", "Ops.... algo não ocorreu como esperado. tente novamente mais tarde.  Você será encaminhado para a aba de usuários agora.", false)
+        })
+      }
     }
   }
 
 
-  async alerta(msg1: string, msg2: string){
+  async alerta(msg1: string, msg2: string, erroDados = false){
     const alerta = await this.alertController.create({
       header: msg1,
       message: msg2,
@@ -73,7 +81,11 @@ export class RegisterUsersPage{
           text: 'Ok',
           role: 'cancel',
           handler: () => {
-            this.router.navigate(['/users'])
+            if(erroDados){
+
+            }else{
+              this.router.navigate(['/users'])
+            }
           }
         }
       ]

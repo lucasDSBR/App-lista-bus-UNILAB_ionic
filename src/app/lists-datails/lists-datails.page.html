@@ -7,7 +7,17 @@
   <ion-title>Checklist Bus UNILAB</ion-title>
 </ion-toolbar>
 
-
+<ion-card id="cardBtn">
+  <ion-card-content>
+    <p></p>
+    <ion-text color="primary">
+      <h1>Total de Pessoas: {{totalUsers}}</h1>
+    </ion-text>
+    <ion-text color="success">
+      <h1>Total de Vagas: {{limiteUsers - totalUsers}}</h1>
+    </ion-text>
+  </ion-card-content>
+</ion-card>
 <ion-content>
   <ion-item *ngFor="let item of data">
     <ion-grid>

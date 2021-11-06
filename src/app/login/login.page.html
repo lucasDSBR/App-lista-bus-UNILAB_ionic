@@ -5,17 +5,12 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <h1>Checklist Bus UNILAB</h1>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
             <img id="imgprincip" src="../../assets/checklist.png" />
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <h4>Bem vindo(a). Faça seu login, busque por uma lista ativa da semana e informe se vai ou volta.</h4>
+            <h1>Checklist Bus UNILAB</h1>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -39,7 +34,8 @@
           </ion-col>
         </ion-row>
         <!--formulario login-->
-        <form novalidade [formGroup]="formLogin" (ngSubmit)="confirmarCadastro()">
+        <ion-spinner name="crescent" *ngIf="loading" color="#FFF"></ion-spinner>
+        <form novalidade [formGroup]="formLogin" (ngSubmit)="confirmarCadastro()" *ngIf="!loading">
           <ion-row>
             <ion-col>
               <ion-item  id="email">

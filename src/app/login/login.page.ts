@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Login } from '../../Model/Login.model';
 import { LoginService } from '../../Service/Login.service';
 import { AlertController } from '@ionic/angular';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -13,14 +14,19 @@ export class LoginPage {
   slideOpts = {
     initialSlide: 0
   }
+
+  loading = false;
+  
   public formLogin: FormGroup = new FormGroup({
     'email': new FormControl(null, [Validators.required]),
     'password': new FormControl(null, [Validators.required])
   });
   constructor(
     public alertController: AlertController,
-    private loginService: LoginService
+    private loginService: LoginService,
   ) {}
+
+
   confirmarCadastro(): void{
     if(this.formLogin.status === "INVALID"){
       this.formLogin.get('email').markAsTouched()
@@ -31,9 +37,13 @@ export class LoginPage {
         this.formLogin.value.email, 
         this.formLogin.value.password
       )
+      this.loading = true
+
       this.loginService.login(dataUser)
       .toPromise().then((resposta: any) => {
+        this.loading = false 
       }).catch((err) => {
+        this.loading = false  
         this.presentAlert()
       })
     }
@@ -48,4 +58,5 @@ export class LoginPage {
     });
     await alert.present();
   }
+
 }
