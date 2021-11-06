@@ -29,6 +29,7 @@ export class ListsDatailsPage implements OnInit {
   public totalUsers: number;
   public limiteUsers: number;
   public data: Usuariolista[] = []
+  loading = false;
   constructor(
     public toastController: ToastController,
     private router: Router,
@@ -51,6 +52,7 @@ export class ListsDatailsPage implements OnInit {
         this.data = resposta.users
         this.limiteUsers = resposta.totalUsers
         this.totalUsers = this.data.length
+        this.loading = false;
     })
     
   }

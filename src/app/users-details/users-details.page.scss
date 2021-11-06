@@ -7,3 +7,14 @@ ion-avatar{
     width: 120px;
     height: 120px;
 }
+p{
+    margin: 4px;
+}
+
+#colNome ion-card-title{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
