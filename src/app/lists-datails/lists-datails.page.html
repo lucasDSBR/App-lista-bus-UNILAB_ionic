@@ -11,7 +11,7 @@
   <ion-card-content>
     <p></p>
     <ion-text color="primary">
-      <h1>Total de Pessoas: {{totalUsers}}</h1>
+      <h1>Total de Pessoas: <ion-spinner name="crescent" *ngIf="loading" color="#FFF"></ion-spinner>{{totalUsers}}</h1>
     </ion-text>
     <ion-text color="success">
       <h1>Total de Vagas: {{limiteUsers - totalUsers}}</h1>
@@ -22,6 +22,9 @@
   <ion-item *ngFor="let item of data">
     <ion-grid>
       <ion-row>
+        <ion-avatar>
+          <img src="../../assets/user.jpg">
+        </ion-avatar>
         <ion-col size="6">
           <ion-label class="ion-text-wrap">
             <ion-text>

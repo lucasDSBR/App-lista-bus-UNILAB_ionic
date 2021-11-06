@@ -7,48 +7,16 @@
   <ion-title>Checklist Bus UNILAB</ion-title>
 </ion-toolbar>
 
+
+<ion-card id="cardBtn">
+  <ion-card-content>
+    <p>Apenas Administradores do sistema podem excluir uma lista...</p>
+    <p>Ao lado de cada usuário, há duas(ou uma) seta(s) informando a situação do usuário</p>
+    <p>Obs: Seta para cima: <ion-text color="success">VAI</ion-text>; Seta para baixo: <ion-text color="danger">VOLTA</ion-text></p>
+  </ion-card-content>
+</ion-card>
+
 <ion-content>
-  <ion-slides pager="true" [options]="slideOpts">
-    <ion-slide>
-      <!--Inicio slide principal-->
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-card id="cardBtn">
-              <ion-item class="ion-activated">
-                <ion-card-title>Como finciona</ion-card-title>
-              </ion-item>
-              <ion-card-content>
-                <p>Apenas Administradores do sistema podem excluir uma lista...</p>
-                <p>Ao lado de cada usuário, há duas(ou uma) seta informando a situação do usuario</p>
-                <p>Obs: Seta para cima: VAI; Seta para baixo: VOLTA</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-slide>
-    <ion-slide>
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-card id="cardBtn">
-              <ion-item class="ion-activated">
-                <ion-card-title>Lista</ion-card-title>
-              </ion-item>
-              <ion-card-content>
-                Apenas administradores do sistema podem excluir ou criar listas...
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-slide>
-  </ion-slides>
-
-
-
-
   <ion-item *ngFor="let item of data" detail (click)="presentModal(item._id);">
     <ion-label class="ion-text-wrap">
       <ion-text color="primary">
