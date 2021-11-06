@@ -72,6 +72,7 @@ export class CreateListsPage implements OnInit {
       this.formulario.get('dataIda').markAsTouched()
       this.formulario.get('dataVolta').markAsTouched()
       this.formulario.get('totalUsers').markAsTouched()
+      this.presentAlert("Todos os campos são obrigatórios!")
     }else{
       let dataList = new Lista(
         this.formulario.value.name,
@@ -86,6 +87,7 @@ export class CreateListsPage implements OnInit {
       .toPromise().then((resposta: any) => {
         if(resposta){
           this.alerta(resposta.name, "Criada com sucesso!")
+          this.formulario.reset();
         }
       }).catch((err) => {
         console.log(err.message)
@@ -112,5 +114,14 @@ export class CreateListsPage implements OnInit {
  
   sair(){
     this.loginService.sair();
+  }
+
+  async presentAlert(msg: string) {
+    const alert = await this.alertController.create({
+      header: 'Erro',
+      message: msg,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 }

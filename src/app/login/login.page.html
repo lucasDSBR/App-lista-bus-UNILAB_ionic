@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-slides pager="true" [options]="slideOpts">
+  <ion-slides pager="false" [options]="slideOpts" #slides>
     <ion-slide>
       <!--Inicio slide principal-->
       <ion-grid>
@@ -15,7 +15,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <img id="passe" src="../../assets/swipe.png" />
+            <ion-button color="light" type="submit" shape="round" (click)="slides.slideNext()" >Começar</ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -50,7 +50,9 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-button color="light" type="submit" shape="round">Entrar</ion-button>
+              <ion-button color="light" type="submit" shape="round">
+                Entrar
+              </ion-button>
             </ion-col>
           </ion-row>
         </form>
@@ -58,4 +60,11 @@
       </ion-grid>
     </ion-slide>
   </ion-slides>
+
+
+
+
+
+
+
 </ion-content>

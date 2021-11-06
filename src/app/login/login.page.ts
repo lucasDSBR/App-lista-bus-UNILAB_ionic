@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Login } from '../../Model/Login.model';
 import { LoginService } from '../../Service/Login.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController} from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +11,11 @@ import { AlertController } from '@ionic/angular';
   providers: [LoginService]
 })
 export class LoginPage {
+
   slideOpts = {
     initialSlide: 0
   }
+  
 
   loading = false;
   
@@ -31,29 +33,28 @@ export class LoginPage {
     if(this.formLogin.status === "INVALID"){
       this.formLogin.get('email').markAsTouched()
       this.formLogin.get('password').markAsTouched()
-
+      this.presentAlert("Você esqueceu de preencher algum campo...")
     }else{
       let dataUser: Login = new Login(
         this.formLogin.value.email, 
         this.formLogin.value.password
       )
-      this.loading = true
+      this.loading = true;
 
       this.loginService.login(dataUser)
-      .toPromise().then((resposta: any) => {
-        this.loading = false 
-      }).catch((err) => {
-        this.loading = false  
-        this.presentAlert()
+        .toPromise().then((resposta: any) => {
+          this.loading = false 
+        }).catch((err) => {
+          this.loading = false  
+          this.presentAlert("Dados incorretos...")
       })
     }
   }
 
-  async presentAlert() {
+  async presentAlert(msg: string) {
     const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
       header: 'Erro',
-      message: 'Dados incorretos...',
+      message: msg,
       buttons: ['OK']
     });
     await alert.present();

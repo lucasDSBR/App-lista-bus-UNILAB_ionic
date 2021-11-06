@@ -346,4 +346,7 @@ export class ListsDatailsPage implements OnInit {
           console.log(err.message)
         })
   }
+
+
+  
 }
