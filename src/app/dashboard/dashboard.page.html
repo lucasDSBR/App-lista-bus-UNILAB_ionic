@@ -76,7 +76,7 @@
           <ion-card-content>
             Nesta opção, você pode enviar todas as listas do semestre para a Secretaria de Educação da Cidade.
           </ion-card-content>
-          <ion-item [routerLink]="['', 'create-lists']" class="ion-activated" detail *ngIf="false">
+          <ion-item [routerLink]="['', 'gerar-email']" class="ion-activated" detail *ngIf="perfil === 'admin'">
             <ion-label color="primary" >Começar</ion-label>
           </ion-item>
         </ion-card>

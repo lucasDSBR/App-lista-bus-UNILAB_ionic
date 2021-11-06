@@ -54,7 +54,17 @@ const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
-  }
+  },
+  {
+    path: 'gerar-email',
+    loadChildren: () => import('./gerar-email/gerar-email.module').then( m => m.GerarEmailPageModule)
+  },
+  {
+    path: 'gerar-email',
+    redirectTo: 'gerar-email',
+    pathMatch: 'full'
+  },
+
 
 ];
 
