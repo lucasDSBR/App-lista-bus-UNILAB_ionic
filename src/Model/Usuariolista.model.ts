@@ -5,4 +5,5 @@ export class Usuariolista {
     volta: boolean
     idPrincipal: string
     situacao: boolean
+    horaEntrouNalista: number
 }

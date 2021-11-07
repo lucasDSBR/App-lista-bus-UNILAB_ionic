@@ -9,12 +9,23 @@
 
 <ion-card id="cardBtn">
   <ion-card-content>
-    <p></p>
     <ion-text color="primary">
       <h1>Total de Pessoas: <ion-spinner name="crescent" *ngIf="loading" color="#FFF"></ion-spinner>{{totalUsers}}</h1>
     </ion-text>
-    <ion-text color="success">
-      <h1>Total de Vagas: {{limiteUsers - totalUsers}}</h1>
+    <ion-text color="dark">
+      <h3>Limite de Vagas: {{limiteUsers}}</h3>
+    </ion-text>
+    <ion-text color="dark">
+      <h3>Vagas apenas para IR: {{vagasApenasIr - userForaLimiteVai}}</h3>
+    </ion-text>
+    <ion-text color="dark">
+      <h3>Vagas apenas para VOLTAR: {{vagasApenasVoltar - userForaLimiteVolta}}</h3>
+    </ion-text>
+    <ion-text color="dark">
+      <h3>Pessoas que apenas VÃO: {{apenasVao}}</h3>
+    </ion-text>
+    <ion-text color="dark">
+      <h3>Pessoas que apenas VOLTAM: {{apenasVoltam}}</h3>
     </ion-text>
   </ion-card-content>
 </ion-card>
@@ -25,17 +36,15 @@
         <ion-avatar>
           <img src="../../assets/user.jpg">
         </ion-avatar>
-        <ion-col size="6">
+        <ion-col size="8">
           <ion-label class="ion-text-wrap">
             <ion-text>
               <h2>{{item.name}}</h2>
             </ion-text>
           </ion-label>
-        </ion-col>
-        <ion-col>
-          <ion-label class="ion-text-wrap">
-            <ion-text>
-              <ion-badge color="success" *ngIf="item.idPrincipal == idUser">Você</ion-badge>
+          <ion-label>
+            <ion-text color="secondary">
+              <h5>Entrou na lista às {{item.horaEntrouNalista}}</h5>
             </ion-text>
           </ion-label>
         </ion-col>
@@ -44,10 +53,12 @@
             <ion-text>
               <ion-row>
                 <ion-col>
-                  <img id="imgswipe" src="../../assets/ir.png" *ngIf="item.vai"/>
+                  <img id="imgswipe" src="../../assets/ir.png" *ngIf="item.vai && !item.confirmIda"/>
+                  <img id="imgswipe" src="../../assets/confirmIr.png" *ngIf="item.volta && item.confirmIda"/>
                 </ion-col>
                 <ion-col>
-                  <img id="imgswipe" src="../../assets/voltar.png" *ngIf="item.volta"/>
+                  <img id="imgswipe" src="../../assets/voltar.png" *ngIf="item.volta && !item.confirmVolta"/>
+                  <img id="imgswipe" src="../../assets/confirmVoltar.png" *ngIf="item.volta && item.confirmVolta"/>
                 </ion-col>
               </ion-row>
             </ion-text>
@@ -58,5 +69,5 @@
   </ion-item>
 </ion-content>
 <ion-card>
-  <ion-button expand="block" (click)="presentActionSheet()" shape="round">Opções</ion-button>
+  <ion-button expand="block" (click)="opcoes()" shape="round">Opções</ion-button>
 </ion-card>
