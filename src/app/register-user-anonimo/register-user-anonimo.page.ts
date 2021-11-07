@@ -6,13 +6,11 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-register-users',
-  templateUrl: './register-users.page.html',
-  styleUrls: ['./register-users.page.scss'],
+  templateUrl: './register-user-anonimo.page.html',
+  styleUrls: ['./register-user-anonimo.page.scss'],
   providers: [UsuarioService]
 })
-export class RegisterUsersPage{
-  tokenUser = localStorage.getItem('isAutenticado');
-
+export class RegisterUserAnonimoPage{
 
   public formulario: FormGroup = new FormGroup({
     'name': new FormControl(null, [Validators.required]),
@@ -61,9 +59,9 @@ export class RegisterUsersPage{
         this.alerta("Dados inválidos", "Desculpe, mas as senhas informadas nos campos 'Senha' e 'Confirmar Senha' não são iguais. Para que seu cadastro seja concretizado, por favor informe valores iguais.", true)
         
       }else{
-        this.usuarioService.cadatroUsuario(dataUser)
+        this.usuarioService.cadatroUsuarioAnonimo(dataUser)
         .toPromise().then((resposta: any) => {
-          this.alerta("Cadastro realizado com sucesso!", 'Usuário cadastrado com sucesso!... Você será encaminhado para a aba de usuários agora.', false)
+          this.alerta("Cadastro realizado com sucesso!", 'Usuário cadastrado com sucesso!... Você será encaminhado para a aba de login agora.', false)
         }).catch((err) => {
           this.alerta("Erro", "Ops.... algo não ocorreu como esperado. tente novamente mais tarde.  Você será encaminhado para a aba de usuários agora.", false)
         })
@@ -84,7 +82,7 @@ export class RegisterUsersPage{
             if(erroDados){
 
             }else{
-              this.router.navigate(['/users'])
+              this.router.navigate(['login'])
             }
           }
         }

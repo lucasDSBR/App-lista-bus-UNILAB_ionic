@@ -17,9 +17,8 @@ export class UsuarioService {
     constructor(private http: Http, private router: Router){
         
     }
-    public cadatroUsuario(formData: User, tokenUser: any): Observable<any>{
+    public cadatroUsuario(formData: User): Observable<any>{
         let headers: Headers = new Headers();
-        headers.append('Authorization', `Bearer ${tokenUser}`);
         headers.append('Content-Type', 'application/json');
         return this.http.post(
             this.url_api,
@@ -29,7 +28,17 @@ export class UsuarioService {
                 this.isAutenticado = resposta.json()
             })
     }
-
+    public cadatroUsuarioAnonimo(formData): Observable<any>{
+        let headers: Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        return this.http.post(
+            this.url_api,
+            JSON.stringify(formData),
+            new RequestOptions({headers: headers})
+            ).map((resposta: any) => {
+                this.isAutenticado = resposta.json()
+            })
+    }
     public getUsuarios(token: any): Observable<any>{
         let headers: Headers = new Headers();
         headers.append('Authorization', `Bearer ${token}`);

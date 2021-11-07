@@ -63,7 +63,11 @@ const routes: Routes = [
     path: 'gerar-email',
     redirectTo: 'gerar-email',
     pathMatch: 'full'
+  },  {
+    path: 'register-user-anonimo',
+    loadChildren: () => import('./register-user-anonimo/register-user-anonimo.module').then( m => m.RegisterUserAnonimoPageModule)
   },
+
 
 
 ];

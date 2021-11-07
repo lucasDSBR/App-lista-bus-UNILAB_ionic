@@ -35,6 +35,7 @@ export class ListsDatailsPage implements OnInit {
   public userForaLimiteVolta = 0;
   public apenasVao = 0;
   public apenasVoltam = 0;
+  public vaoEVoltam = 0;
   loading = false;
   constructor(
     public toastController: ToastController,
@@ -59,6 +60,7 @@ export class ListsDatailsPage implements OnInit {
         this.limiteUsers = resposta.totalUsers
         this.totalUsers = this.data.length
         this.loading = false;
+        console.log(this.data)
         this.data.forEach((vagas) => {
           if(vagas.vai == false && vagas.userForaLimite == false){
             this.vagasApenasIr++
@@ -69,7 +71,7 @@ export class ListsDatailsPage implements OnInit {
           if(vagas.volta == false && vagas.userForaLimite == false){
             this.vagasApenasVoltar++
           }
-          if(vagas.volta == true &&vagas.userForaLimite == true){
+          if(vagas.volta == true && vagas.userForaLimite == true){
             this.userForaLimiteVolta++
           }
           if(vagas.vai == true && vagas.volta == false){
@@ -77,6 +79,9 @@ export class ListsDatailsPage implements OnInit {
           }
           if(vagas.volta == true && vagas.vai == false){
             this.apenasVoltam++
+          }
+          if(vagas.vai == true && vagas.volta == true){
+            this.vaoEVoltam++
           }
             
         })
@@ -147,8 +152,9 @@ export class ListsDatailsPage implements OnInit {
       vai: acoes[0] == 1? true : false,
       volta: acoes[1] == 2? true : acoes[0] == 2? true : false,
       situacao: true,
-      confirmVolta: user.confirmVolta,
-      confirmIda: user.confirmIda,
+      userForaLimite: user.userForaLimite,
+      confirmVolta: false,
+      confirmIda: false,
       horaEntrouNalista: user.horaEntrouNalista
     })
     let data = {users: usuariosNaLista}
@@ -166,39 +172,52 @@ export class ListsDatailsPage implements OnInit {
     var usuariosNaLista = this.data
     const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
     const index = usuariosNaLista.indexOf(user)
-    if (index > -1) {
-      usuariosNaLista.splice(index, 1);
-    }
+    
+
     if(acoes == 1){
-      usuariosNaLista.push({
-        name: user.name,
-        idPrincipal: user.idPrincipal,
-        vai: user.vai,
-        volta: user.volta,
-        situacao: user.situacao,
-        confirmVolta: user.confirmVolta,
-        confirmIda: acoes == 1? user.confirmIda == true? true : true : false,
-        horaEntrouNalista: user.horaEntrouNalista
-      })
+      if(user.vai == false){
+        this.alertaIrVoltar('Você não marcou a opção de "IR" anteriormente.')
+      }else{
+        if (index > -1) {
+          usuariosNaLista.splice(index, 1);
+        }
+        usuariosNaLista.push({
+          name: user.name,
+          idPrincipal: user.idPrincipal,
+          vai: user.vai,
+          volta: user.volta,
+          situacao: user.situacao,
+          userForaLimite: user.userForaLimite,
+          confirmVolta: user.confirmVolta,
+          confirmIda: acoes == 1? user.confirmIda == true? true : true : false,
+          horaEntrouNalista: user.horaEntrouNalista
+        })
+      }
     }
+
     if(acoes == 2){
-      usuariosNaLista.push({
-        name: user.name,
-        idPrincipal: user.idPrincipal,
-        vai: user.vai,
-        volta: user.volta,
-        situacao: user.situacao,
-        confirmVolta: acoes == 2? user.confirmVolta == true? true : true : false,
-        confirmIda: user.confirmIda,
-        horaEntrouNalista: user.horaEntrouNalista
-      })
+      if(user.volta == false){
+        this.alertaIrVoltar('Você não marcou a opção de "VOLTAR" anteriormente.')
+      }else{
+        if (index > -1) {
+          usuariosNaLista.splice(index, 1);
+        }
+        usuariosNaLista.push({
+          name: user.name,
+          idPrincipal: user.idPrincipal,
+          vai: user.vai,
+          volta: user.volta,
+          situacao: user.situacao,
+          userForaLimite: user.userForaLimite,
+          confirmVolta: acoes == 2? user.confirmVolta == true? true : true : false,
+          confirmIda: user.confirmIda,
+          horaEntrouNalista: user.horaEntrouNalista
+        })
+      }
     }
     let data = {users: usuariosNaLista}
     this.listaServices.editarSituacao(data, this.idLista)
     .toPromise().then((resposta: any) => {
-      if(resposta == undefined) {
-        this.confirmacao("Seus dados foram atualizados!")
-      }
     }).catch((err) => {
       console.log(err.message)
     })
@@ -356,6 +375,22 @@ export class ListsDatailsPage implements OnInit {
     });
     await alerta.present();
   }
+  async alertaIrVoltar(mensagem: string){
+    const alerta = await this.alertController.create({
+      header: mensagem,
+      cssClass: 'alertDanger',
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'cancel',
+          handler: () =>{
+          }
+        }
+      ]
+    });
+    await alerta.present();
+  }
+
   async alerta(mensagem: string){
     const alerta = await this.alertController.create({
       header: mensagem,
@@ -366,8 +401,7 @@ export class ListsDatailsPage implements OnInit {
           role: 'cancel',
           handler: () =>{
             this.router.navigate(['', 'dashboard'])
-          },
-          cssClass: 'alertDanger'
+          }
         }
       ]
     });

@@ -15,7 +15,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button color="light" type="submit" shape="round" (click)="slides.slideNext()" >Começar</ion-button>
+            <ion-button color="light" type="submit" shape="round" (click)="slides.slideNext()" >Começar<ion-icon name="arrow-forward"></ion-icon></ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -30,7 +30,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <h1>Entrar</h1>
+            <h1>Entrar </h1>
           </ion-col>
         </ion-row>
         <!--formulario login-->
@@ -50,8 +50,11 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-button color="light" type="submit" shape="round">
+              <ion-button type="submit" shape="round" id="btnEntrar">
                 Entrar
+              </ion-button>
+              <ion-button color="light" shape="round" [routerLink]="['', 'register-user-anonimo']">
+                Cadastrar-se
               </ion-button>
             </ion-col>
           </ion-row>
@@ -62,7 +65,7 @@
   </ion-slides>
 
 
-
+  
 
 
 

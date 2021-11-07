@@ -9,6 +9,7 @@ import { ListaService } from '../../Service/Lista.service';
 })
 export class DashboardPage implements OnInit {
   perfil = localStorage.getItem('perfil');
+  user = localStorage.getItem('name');
   constructor(
     private loginService: LoginService,
     private listaServices: ListaService

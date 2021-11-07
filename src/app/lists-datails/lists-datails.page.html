@@ -9,23 +9,20 @@
 
 <ion-card id="cardBtn">
   <ion-card-content>
+    <ion-text color="dark">
+      <h1>Limite de Vagas: <ion-spinner name="crescent" *ngIf="loading" color="#FFF"></ion-spinner>{{limiteUsers}}</h1>
+    </ion-text>
+    <ion-text color="success">
+      <h1>Vagas: <ion-spinner name="crescent" *ngIf="loading" color="#FFF"></ion-spinner>{{limiteUsers - vaoEVoltam}}</h1>
+    </ion-text>
     <ion-text color="primary">
-      <h1>Total de Pessoas: <ion-spinner name="crescent" *ngIf="loading" color="#FFF"></ion-spinner>{{totalUsers}}</h1>
+      <h3>Total de Pessoas(Vão e voltam): {{vaoEVoltam}}</h3>
     </ion-text>
     <ion-text color="dark">
-      <h3>Limite de Vagas: {{limiteUsers}}</h3>
-    </ion-text>
-    <ion-text color="dark">
-      <h3>Vagas apenas para IR: {{vagasApenasIr - userForaLimiteVai}}</h3>
+      <h3>Vagas apenas para IR: {{vagasApenasIr}}</h3>
     </ion-text>
     <ion-text color="dark">
       <h3>Vagas apenas para VOLTAR: {{vagasApenasVoltar - userForaLimiteVolta}}</h3>
-    </ion-text>
-    <ion-text color="dark">
-      <h3>Pessoas que apenas VÃO: {{apenasVao}}</h3>
-    </ion-text>
-    <ion-text color="dark">
-      <h3>Pessoas que apenas VOLTAM: {{apenasVoltam}}</h3>
     </ion-text>
   </ion-card-content>
 </ion-card>
