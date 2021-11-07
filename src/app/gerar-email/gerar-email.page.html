@@ -23,9 +23,9 @@
       <p>Total máximo de pessoas: {{item.totalUsers}}</p>
     </ion-text>
   </ion-label>
-  <ion-checkbox slot="start" (click)="macarLista($event, item._id)"></ion-checkbox>
+  <ion-checkbox slot="start" (click)="macarLista($event, item._id)" id="check"></ion-checkbox>
 </ion-item>
 </ion-content>
-<ion-button expand="block" (click)="enviar()" shape="round">Enviar</ion-button>
+<ion-button expand="block" (click)="getPermission()" shape="round">Enviar</ion-button>
 
 
