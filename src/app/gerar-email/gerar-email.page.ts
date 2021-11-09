@@ -134,7 +134,8 @@ export class GerarEmailPage implements OnInit {
             if(data.email == ''){
               this.alert("Você precisa informar um E-mail de destino.")
             }else{
-              this.carregando(data)
+              console.log("1 -"+this.localDisc)
+              this.carregando(data.email)
             }
           }
         }
@@ -151,6 +152,7 @@ export class GerarEmailPage implements OnInit {
     });
     await loading.present();
     this.enviar(data);
+    
   }
 
   enviar(emailDestino: string){
@@ -162,9 +164,9 @@ export class GerarEmailPage implements OnInit {
       body: 'Obs: Nas colunas ',
       isHtml: true
     };
-    this.emailComposer.open(email);
+    this.emailComposer.open(email)
     this.localDisc = []
-    this.router.navigate(['', 'dashboard'])
+    console.log("1 -"+this.localDisc)
   }
 
 
