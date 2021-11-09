@@ -172,7 +172,8 @@ export class ListsDatailsPage implements OnInit {
     var usuariosNaLista = this.data
     const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
     const index = usuariosNaLista.indexOf(user)
-    
+    console.log(user)
+
 
     if(acoes == 1){
       if(user.vai == false){
@@ -189,7 +190,7 @@ export class ListsDatailsPage implements OnInit {
           situacao: user.situacao,
           userForaLimite: user.userForaLimite,
           confirmVolta: user.confirmVolta,
-          confirmIda: acoes == 1? user.confirmIda == true? true : true : false,
+          confirmIda: true,
           horaEntrouNalista: user.horaEntrouNalista
         })
       }
