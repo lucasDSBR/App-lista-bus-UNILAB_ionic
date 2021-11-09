@@ -7,6 +7,9 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { format } from 'util';
+import * as pdfmake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
 @Component({
   selector: 'app-gerar-email',
   templateUrl: './gerar-email.page.html',
@@ -64,7 +67,7 @@ export class GerarEmailPage implements OnInit {
     for(var i = 0; i < this.listasParaEnvio.length; i++){
       const lista = this.data.find(data => data._id === this.listasParaEnvio[i])
       if(lista.users.length > 0){
-        var csv = 'Id Lista, Nome da Lista, Aluno(a), Foi para Redenção, Voltou para Pentecoste, Data Ida(Lista), Data Volta(Lista)\n';
+        var csv = 'Id Lista, Nome da Lista, Aluno(a), Foi para Redencao, Voltou para Pentecoste, Data Ida(Lista), Data Volta(Lista)\n';
  
           lista.users.forEach(function(row) {
                   csv += lista._id;
@@ -76,7 +79,7 @@ export class GerarEmailPage implements OnInit {
                   csv += ','+ lista.dataVolta;
                   csv += '\n';
           });
-        console.log(csv)
+        console.log(lista.users)
         this.file.writeFile(this.file.externalRootDirectory, `${lista.name}.csv`, csv, {replace: true})
         .then((ok) => {
           this.localDisc.push(`${this.file.externalRootDirectory}${lista.name}.csv`)
@@ -134,7 +137,6 @@ export class GerarEmailPage implements OnInit {
             if(data.email == ''){
               this.alert("Você precisa informar um E-mail de destino.")
             }else{
-              console.log("1 -"+this.localDisc)
               this.carregando(data.email)
             }
           }
@@ -166,7 +168,6 @@ export class GerarEmailPage implements OnInit {
     };
     this.emailComposer.open(email)
     this.localDisc = []
-    console.log("1 -"+this.localDisc)
   }
 
 

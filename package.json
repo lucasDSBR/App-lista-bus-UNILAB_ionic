@@ -31,6 +31,7 @@
     "@ionic-native/email-composer": "^5.36.0",
     "@ionic-native/file": "^5.36.0",
     "@ionic/angular": "^5.5.2",
+    "pdfmake": "^0.2.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
@@ -56,6 +57,7 @@
     "@typescript-eslint/parser": "4.16.1",
     "com-badrit-base64": "^0.2.0",
     "cordova-android": "^8.0.0",
+    "cordova-browser": "^6.0.0",
     "cordova-plugin-android-permissions": "^1.1.2",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-email-composer": "^0.8.15",
@@ -105,7 +107,8 @@
       "cordova-plugin-android-permissions": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ]
   }
 }
