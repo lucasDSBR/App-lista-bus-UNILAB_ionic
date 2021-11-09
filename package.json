@@ -31,6 +31,7 @@
     "@ionic-native/email-composer": "^5.36.0",
     "@ionic-native/file": "^5.36.0",
     "@ionic/angular": "^5.5.2",
+    "jspdf": "^2.4.0",
     "pdfmake": "^0.2.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",

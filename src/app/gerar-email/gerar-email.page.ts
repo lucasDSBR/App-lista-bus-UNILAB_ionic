@@ -9,14 +9,14 @@ import { Router } from '@angular/router';
 import { format } from 'util';
 import * as pdfmake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-
+import { jsPDF } from "jspdf";
 @Component({
   selector: 'app-gerar-email',
   templateUrl: './gerar-email.page.html',
   styleUrls: ['./gerar-email.page.scss'],
   providers:[ListaService]
 })
-export class GerarEmailPage implements OnInit {
+export class GerarEmailPage {
   loading = true;
   data = [];
   usersLista = [];
@@ -33,7 +33,7 @@ export class GerarEmailPage implements OnInit {
     private listaServices: ListaService
   ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.listaServices.getLista().then((resposta: any) => {
       this.loading = false;
       this.data = resposta.items
@@ -67,14 +67,14 @@ export class GerarEmailPage implements OnInit {
     for(var i = 0; i < this.listasParaEnvio.length; i++){
       const lista = this.data.find(data => data._id === this.listasParaEnvio[i])
       if(lista.users.length > 0){
-        var csv = 'Id Lista, Nome da Lista, Aluno(a), Foi para Redencao, Voltou para Pentecoste, Data Ida(Lista), Data Volta(Lista)\n';
+        var csv = 'Id Lista                    , Nome da Lista                    , Aluno(a)                    , Foi para Redencao                    , Voltou para Pentecoste                    , Data Ida(Lista)                    , Data Volta(Lista)                    \n';
  
           lista.users.forEach(function(row) {
                   csv += lista._id;
                   csv += ','+ lista.name;
                   csv += ','+ row.name;
-                  csv += ','+ row.vai;
-                  csv += ','+ row.volta;
+                  csv += ','+ row.confirmIda;
+                  csv += ','+ row.confirmVolta;
                   csv += ','+ lista.dataIda;
                   csv += ','+ lista.dataVolta;
                   csv += '\n';
