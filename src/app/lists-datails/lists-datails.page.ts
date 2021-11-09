@@ -9,6 +9,7 @@ import { UserLista } from '../../Model/UserLista.model';
 import { ListsPage } from '../lists/lists.page';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+
 @Component({
   selector: 'app-lists-datails',
   templateUrl: './lists-datails.page.html',
@@ -50,7 +51,6 @@ export class ListsDatailsPage implements OnInit {
 
 
   ngOnInit() {
-
   }
 
   ionViewWillEnter() {
@@ -83,14 +83,15 @@ export class ListsDatailsPage implements OnInit {
           if(vagas.vai == true && vagas.volta == true){
             this.vaoEVoltam++
           }
-            
+          if((vagas.volta == true && vagas.vai == false && vagas.userForaLimite == true) || (vagas.volta == false && vagas.vai == true  && vagas.userForaLimite == true)){
+            console.log(1)
+          }
         })
+
     })
     
     
   }
-
-
 
   sairDetalheLista() {
     this.modalController.dismiss({
@@ -105,6 +106,13 @@ export class ListsDatailsPage implements OnInit {
     }
     var date = new Date();
     return [date.getHours(), date.getMinutes()].map(pad).join(':');
+  }
+  dataAtual(){
+    var data = new Date();
+    var dia = String(data.getDate()).padStart(2, '0');
+    var mes = String(data.getMonth() + 1).padStart(2, '0');
+    var ano = data.getFullYear();
+    return dia + '/' + mes + '/' + ano;
   }
 
   entrarLista(acoes: any){
@@ -132,7 +140,8 @@ export class ListsDatailsPage implements OnInit {
     .toPromise().then((resposta: any) => {
       this.ionViewWillEnter()
       if(resposta === undefined){
-        this.confirmacao("Você saiu da lista com sucesso!")
+        this.alerta("Você saiu da lista com sucesso!")
+        this.sairDetalheLista();
       }
     }).catch((err) => {
       console.log(err.message)
@@ -161,7 +170,8 @@ export class ListsDatailsPage implements OnInit {
     this.listaServices.editarSituacao(data, this.idLista)
     .toPromise().then((resposta: any) => {
       if(resposta == undefined) {
-        this.confirmacao("Seus dados foram atualizados!")
+        this.alerta("Seus dados foram atualizados com sucesso!")
+        this.sairDetalheLista();
       }
     }).catch((err) => {
       console.log(err.message)
@@ -219,6 +229,12 @@ export class ListsDatailsPage implements OnInit {
     let data = {users: usuariosNaLista}
     this.listaServices.editarSituacao(data, this.idLista)
     .toPromise().then((resposta: any) => {
+      if(acoes == 1){
+        this.alerta("Você vonfirmou a sua IDA para Redenção com Sucesso!")
+      }else if(acoes == 2){
+        this.alerta("Você vonfirmou o seu RETORNO para pentecoste com Sucesso!")
+      }
+      this.sairDetalheLista();
     }).catch((err) => {
       console.log(err.message)
     })
@@ -233,6 +249,7 @@ export class ListsDatailsPage implements OnInit {
   }
 
   inserirUsuarioNaLista(users: any, acoes){
+    const d = new Date();
     if(acoes == "IR"){
       users.push(
         {
@@ -272,7 +289,7 @@ export class ListsDatailsPage implements OnInit {
           userForaLimite: false,
           confirmVolta: false,
           confirmIda: false,
-          horaEntrouNalista: this.novaHora()
+          horaEntrouNalista: this.novaHora()+" de "+this.dataAtual()
         }
       );
     }
@@ -281,7 +298,8 @@ export class ListsDatailsPage implements OnInit {
     let data = {users: users}
     this.listaServices.entrarNaLista(data, this.idLista)
     .toPromise().then((resposta: any) => {
-      this.ionViewWillEnter()
+      this.alerta("Parabéns, você conseguiu sua vaga na lista!")
+      this.sairDetalheLista();
     }).catch((err) => {
       console.log(err.message)
     })
@@ -294,14 +312,13 @@ export class ListsDatailsPage implements OnInit {
         text: 'Entrar na lista',
         role: 'destructive',
         handler: () => {
-          if(this.data.length == this.limiteUsers){
-            if(this.vagasApenasIr > 0){
-              this.aletaDeVagas("Desculpe, temos vagas apenas para IR. Deseja entrar mesmo assim ?", "IR")
-            }else if(this.vagasApenasVoltar > 0){
-              this.aletaDeVagas("Desculpe, temos vagas apenas para VOLTAR. Deseja entrar mesmo assim ?", "VOLTAR")
-            }else{
-              this.alerta('Desculpe. A lista já atingiu o limite de '+this.limiteUsers+' pessoa(s).');
-            }
+
+          if(this.vagasApenasIr != 0 && this.vagasApenasVoltar == 0 && (this.limiteUsers - this.vaoEVoltam - this.vagasApenasVoltar - this.vagasApenasIr) == 0){
+            this.aletaDeVagas("Desculpe, temos vagas apenas para IR. Deseja entrar mesmo assim ?", "IR")
+          }else if((this.vagasApenasVoltar - this.userForaLimiteVolta) != 0 && this.vagasApenasIr == 0 && (this.limiteUsers - this.vaoEVoltam - this.vagasApenasVoltar - this.vagasApenasIr) == 0){
+            this.aletaDeVagas("Desculpe, temos vagas apenas para VOLTAR. Deseja entrar mesmo assim ?", "VOLTAR")
+          }else if(this.vagasApenasIr == 0 && (this.vagasApenasVoltar - this.userForaLimiteVolta) == 0 && (this.limiteUsers - this.vaoEVoltam - this.vagasApenasVoltar - this.vagasApenasIr) == 0){
+            this.alerta('Desculpe. A lista já atingiu o limite de '+this.limiteUsers+' pessoa(s).');
           }else{
             this.entrarNaLista();
           }
@@ -401,7 +418,6 @@ export class ListsDatailsPage implements OnInit {
           text: 'Ok',
           role: 'cancel',
           handler: () =>{
-            this.router.navigate(['', 'dashboard'])
           }
         }
       ]
@@ -570,6 +586,7 @@ export class ListsDatailsPage implements OnInit {
           if(resposta == null){
             this.alerta('Lista excluida com sucesso!');
             this.sairDetalheLista()
+            this.router.navigate(['', 'dashboard'])
           }
         }).catch((err) => {
           console.log(err.message)
