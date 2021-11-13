@@ -9,7 +9,13 @@ import { Router } from '@angular/router';
 import { format } from 'util';
 import * as pdfmake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { jsPDF } from "jspdf";
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 @Component({
   selector: 'app-gerar-email',
   templateUrl: './gerar-email.page.html',
@@ -17,6 +23,7 @@ import { jsPDF } from "jspdf";
   providers:[ListaService]
 })
 export class GerarEmailPage {
+  
   loading = true;
   data = [];
   usersLista = [];
@@ -60,26 +67,25 @@ export class GerarEmailPage {
       }
     }
 
-    console.log(this.listasParaEnvio)
   }
   gerarCSV(){
     console.log(this.listasParaEnvio[0])
     for(var i = 0; i < this.listasParaEnvio.length; i++){
       const lista = this.data.find(data => data._id === this.listasParaEnvio[i])
       if(lista.users.length > 0){
-        var csv = 'Id Lista                    , Nome da Lista                    , Aluno(a)                    , Foi para Redencao                    , Voltou para Pentecoste                    , Data Ida(Lista)                    , Data Volta(Lista)                    \n';
+        var csv = 'Id Lista, Nome da Lista, Aluno(a), Foi para Redenção, Voltou para Pentecoste, Data Ida(Lista), Data Volta(Lista)\n';
  
           lista.users.forEach(function(row) {
                   csv += lista._id;
                   csv += ','+ lista.name;
                   csv += ','+ row.name;
-                  csv += ','+ row.confirmIda;
-                  csv += ','+ row.confirmVolta;
+                  csv += ','+ row.vai;
+                  csv += ','+ row.volta;
                   csv += ','+ lista.dataIda;
                   csv += ','+ lista.dataVolta;
                   csv += '\n';
           });
-        console.log(lista.users)
+        console.log(csv)
         this.file.writeFile(this.file.externalRootDirectory, `${lista.name}.csv`, csv, {replace: true})
         .then((ok) => {
           this.localDisc.push(`${this.file.externalRootDirectory}${lista.name}.csv`)
@@ -91,6 +97,85 @@ export class GerarEmailPage {
     }
   }
 
+  gerarXLSX(){
+    this.exportAsExcelFile(this.data);
+  }
+
+  gerarPDF(){
+    this.exportAsPdfFile(this.data);
+  }
+  public exportAsPdfFile(json: any[]): void {
+    if(this.listasParaEnvio.length >= 1){
+      this.listasParaEnvio.forEach(idLista => {
+        const idlists = this.data.find(idlist => idlist._id === idLista)
+        console.log(idlists.users)
+        var doc = new jsPDF('l', 'pt');
+        var rows = [];
+        const head = [[' -- ','Usuario', 'Foi p/Redenção', 'Voltou p/Pentecoste', 'Situacao SIGAA', 'Usuario Fora das Vagas']]
+        for(var key in idlists.users){
+            var temp = [
+              key,
+              idlists.users[key].name,
+              idlists.users[key].confirmIda == false? "NÃO": "SIM",
+              idlists.users[key].confirmVolta == false? "NÃO": "SIM",
+              idlists.users[key].situacao == false? "INATIVO(A)": "AIVO(A)",
+              idlists.users[key].userForaLimite == false? "NÃO": "SIM"
+            ];
+            rows.push(temp)
+        }
+        doc.text("Docente: ", 10, 30)
+        autoTable(doc, {
+          head: head,
+          body: rows,
+          didDrawCell: (data) => { },
+        });
+        doc.save('teste.pdf');
+        const data: Blob = new Blob([doc.output('blob')], {type: 'application/pdf'});
+        this.file.writeFile(this.file.externalRootDirectory, `_export_${new  Date().getTime()}.pdf`, data, {replace: true})
+        .then((ok) => {
+            this.localDisc.push(`${this.file.externalRootDirectory}_export_${new  Date().getTime()}.pdf`)
+            
+        })
+        .catch((err) => {
+            console.error("Deu erro: "+err);
+        })
+      })
+    }
+
+}
+  public exportAsExcelFile(json: any[]): void {
+      if(this.listasParaEnvio.length >= 1){
+        this.listasParaEnvio.forEach(idLista => {
+          const idlists = this.data.find(idlist => idlist._id === idLista)
+          const users = idlists.users
+          var Heading =[
+            [ "Hora Entrou","Confirmou p/Redenção","Confirmou p/Pentecoste", "Vaga de reseva", "Volta p/Pentecoste", "Vai p/Redenção", "Situação SIGAA", "Identificador Aluno", "Aluno", "Identificador lista"]  
+          ];
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(users);
+          
+          const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+          XLSX.utils.sheet_add_aoa(worksheet, Heading);
+          const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          this.saveAsExcelFile(excelBuffer, idlists.name);
+        })
+      }
+
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+      const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
+      //FileSaver.saveAs(data, fileName + '_export_' + new  Date().getTime() + EXCEL_EXTENSION);
+      this.file.writeFile(this.file.externalRootDirectory, `${fileName}_export_${new  Date().getTime()}.xlsx`, data, {replace: true})
+      .then((ok) => {
+          this.localDisc.push(`${this.file.externalRootDirectory}${fileName}_export_${new  Date().getTime()}.xlsx`)
+          
+      })
+      .catch((err) => {
+          console.error("Deu erro: "+err);
+      })
+  }
+
+
   getPermission() {
     if(this.listasParaEnvio.length == 0){
       this.alert("É necessário informar pelo menos uma lista para enviar.")
@@ -99,13 +184,14 @@ export class GerarEmailPage {
       .then(status => {
         if (status.hasPermission) {
           this.gerarCSV();
-          this.alertEmailDestino();
+          this.carregando();
         } 
         else {
           this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
             .then(status => {
               if(status.hasPermission) {
-                this.alertEmailDestino();
+                this.gerarCSV();
+                this.carregando();
               }
             });
         }
@@ -137,7 +223,7 @@ export class GerarEmailPage {
             if(data.email == ''){
               this.alert("Você precisa informar um E-mail de destino.")
             }else{
-              this.carregando(data.email)
+              this.enviar(data.email)
             }
           }
         }
@@ -146,18 +232,20 @@ export class GerarEmailPage {
     await editSituacao.present();
   }
 
-  async carregando(data: string) {
+  async carregando() {
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
       message: 'Gerando listas...',
-      duration: 2000
+      duration: 5000
     });
     await loading.present();
-    this.enviar(data);
-    
+    setTimeout(a => {
+      this.alertEmailDestino();
+    },5000);
   }
 
   enviar(emailDestino: string){
+    console.log(this.localDisc)
     let email = {
       to: emailDestino,
       attachments: this.localDisc,
