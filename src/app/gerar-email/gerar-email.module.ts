@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { GerarEmailPageRoutingModule } from './gerar-email-routing.module';
 
 import { GerarEmailPage } from './gerar-email.page';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
+//import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { Base64 } from '@ionic-native/base64/ngx';
 import {File} from '@ionic-native/file/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Document, Packer } from 'docx';
 
 @NgModule({
   imports: [
@@ -20,6 +22,6 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
     GerarEmailPageRoutingModule
   ],
   declarations: [GerarEmailPage],
-  providers: [EmailComposer, Base64, File, AndroidPermissions]
+  providers: [Base64, File, AndroidPermissions, SocialSharing, Document, Packer]
 })
 export class GerarEmailPageModule {}
