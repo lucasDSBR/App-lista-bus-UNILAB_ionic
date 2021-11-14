@@ -203,6 +203,18 @@ export class ListsDatailsPage implements OnInit {
           confirmIda: true,
           horaEntrouNalista: user.horaEntrouNalista
         })
+
+        let data = {users: usuariosNaLista}
+        this.listaServices.editarSituacao(data, this.idLista)
+        .toPromise().then((resposta: any) => {
+          console.log(resposta == undefined);
+          if(resposta == undefined){
+            this.alerta("Você confirmou sua IDA com sucesso!");
+          }
+          this.sairDetalheLista();
+        }).catch((err) => {
+          console.log(err.message)
+        })
       }
     }
 
@@ -224,20 +236,20 @@ export class ListsDatailsPage implements OnInit {
           confirmIda: user.confirmIda,
           horaEntrouNalista: user.horaEntrouNalista
         })
+        let data = {users: usuariosNaLista}
+        this.listaServices.editarSituacao(data, this.idLista)
+        .toPromise().then((resposta: any) => {
+          console.log(resposta == undefined);
+          if(resposta == undefined){
+            this.alerta("Você confirmou seu RETORNO com sucesso!");
+          }
+          this.sairDetalheLista();
+        }).catch((err) => {
+          console.log(err.message)
+        })
       }
     }
-    let data = {users: usuariosNaLista}
-    this.listaServices.editarSituacao(data, this.idLista)
-    .toPromise().then((resposta: any) => {
-      if(acoes == 1){
-        this.alerta("Você vonfirmou a sua IDA para Redenção com Sucesso!")
-      }else if(acoes == 2){
-        this.alerta("Você vonfirmou o seu RETORNO para pentecoste com Sucesso!")
-      }
-      this.sairDetalheLista();
-    }).catch((err) => {
-      console.log(err.message)
-    })
+    
   }
 
   async confirmacao(msg: string) {
@@ -331,6 +343,12 @@ export class ListsDatailsPage implements OnInit {
           const user = usuariosNaLista.find(usuario => usuario.idPrincipal === this.idUser)
           if(!user){
             this.alerta('Você ainda não entrou na lista.');
+          }else if(this.vagasApenasIr != 0 && this.vagasApenasVoltar == 0 && (this.limiteUsers - this.vaoEVoltam - this.vagasApenasVoltar - this.vagasApenasIr) == 0){
+            this.confirmacaoEdicaoLista("Podemos editar sua situação na lista apenas para IR. Deseja editar mesmo assim mesmo?", 1)
+          }else if((this.vagasApenasVoltar - this.userForaLimiteVolta) != 0 && this.vagasApenasIr == 0 && (this.limiteUsers - this.vaoEVoltam - this.vagasApenasVoltar - this.vagasApenasIr) == 0){
+            this.confirmacaoEdicaoLista("Podemos editar sua situação na lista apenas para VOLTAR. Deseja editar mesmo assim mesmo?", 2)
+          }else if(this.vagasApenasIr == 0 && (this.vagasApenasVoltar - this.userForaLimiteVolta) == 0 && (this.limiteUsers - this.vaoEVoltam - this.vagasApenasVoltar - this.vagasApenasIr) == 0){
+            this.alerta('Não é possível editar sua situação na lista. Não há vagas em nenhuma modalidade.');
           }else{
             this.editarSituacao()
           }
@@ -375,6 +393,24 @@ export class ListsDatailsPage implements OnInit {
     await actionSheet.present();
   }
 
+  async confirmacaoEdicaoLista(msg: string, acoes){
+    const alerta = await this.alertController.create({
+      header: msg,
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.editarSituacaoUsuario(acoes)
+          }
+        }
+      ]
+    });
+    await alerta.present();
+  }
   async confirmacaoSairLista(){
     const alerta = await this.alertController.create({
       header: "Deseja realmente sair da lista ?",
@@ -452,8 +488,9 @@ export class ListsDatailsPage implements OnInit {
         }, {
           text: 'Confirmar',
           handler: (acoes) => {
-            if(acoes.length == 0)
+            if(acoes.length == 0){
               this.alerta("Uma opção deve ser selecionada...");
+            }
             //outras ações:
             this.editarSituacaoUsuario(acoes)
           }

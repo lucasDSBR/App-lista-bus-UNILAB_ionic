@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ListaService } from '../../Service/Lista.service';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
+//import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { AlertController } from '@ionic/angular';
 import { File as Native_File } from '@ionic-native/file/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
@@ -13,7 +13,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
 @Component({
@@ -31,12 +31,13 @@ export class GerarEmailPage {
   arquivos = [];
   localDisc = [];
   constructor(
+    private socialSharing: SocialSharing,
     public loadingController: LoadingController,
     private androidPermissions: AndroidPermissions,
     private file: Native_File,
     private router: Router,
     public alertController: AlertController,
-    private emailComposer: EmailComposer,
+    //private emailComposer: EmailComposer,
     private listaServices: ListaService
   ) { }
 
@@ -86,15 +87,16 @@ export class GerarEmailPage {
                   csv += '\n';
           });
         console.log(csv)
-        this.file.writeFile(this.file.externalRootDirectory, `${lista.name}.csv`, csv, {replace: true})
+        this.file.writeFile(this.file.dataDirectory, `${lista.name}.csv`, csv, {replace: true})
         .then((ok) => {
-          this.localDisc.push(`${this.file.externalRootDirectory}${lista.name}.csv`)
+          this.localDisc.push(`${this.file.dataDirectory}${lista.name}.csv`)
         })
         .catch((err) => {
           console.error("Deu erro: "+err);
         })
       };
     }
+    this.alertEmailDestino()
   }
 
   gerarXLSX(){
@@ -129,11 +131,12 @@ export class GerarEmailPage {
           body: rows,
           didDrawCell: (data) => { },
         });
-        doc.save('teste.pdf');
-        const data: Blob = new Blob([doc.output('blob')], {type: 'application/pdf'});
-        this.file.writeFile(this.file.externalRootDirectory, `_export_${new  Date().getTime()}.pdf`, data, {replace: true})
+        let docRes = doc.output();
+        let buffer = new ArrayBuffer(docRes.length);
+        //const data: Blob = new Blob([doc.output('blob')], {type: 'application/pdf'});
+        this.file.writeFile(this.file.dataDirectory, `${idlists.name}_export_${new  Date().getTime()}.pdf`, buffer, {replace: true})
         .then((ok) => {
-            this.localDisc.push(`${this.file.externalRootDirectory}_export_${new  Date().getTime()}.pdf`)
+            this.localDisc.push(`${this.file.dataDirectory}${idlists.name}_export_${new  Date().getTime()}.pdf`)
             
         })
         .catch((err) => {
@@ -141,6 +144,8 @@ export class GerarEmailPage {
         })
       })
     }
+
+    this.alertEmailDestino()
 
 }
   public exportAsExcelFile(json: any[]): void {
@@ -160,14 +165,16 @@ export class GerarEmailPage {
         })
       }
 
+      this.alertEmailDestino()
+
   }
 
   private saveAsExcelFile(buffer: any, fileName: string): void {
-      const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
+      //const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
       //FileSaver.saveAs(data, fileName + '_export_' + new  Date().getTime() + EXCEL_EXTENSION);
-      this.file.writeFile(this.file.externalRootDirectory, `${fileName}_export_${new  Date().getTime()}.xlsx`, data, {replace: true})
+      this.file.writeFile(this.file.dataDirectory, `${fileName}_export_${new  Date().getTime()}.xlsx`, buffer, {replace: true})
       .then((ok) => {
-          this.localDisc.push(`${this.file.externalRootDirectory}${fileName}_export_${new  Date().getTime()}.xlsx`)
+          this.localDisc.push(`${this.file.dataDirectory}${fileName}_export_${new  Date().getTime()}.xlsx`)
           
       })
       .catch((err) => {
@@ -183,15 +190,13 @@ export class GerarEmailPage {
       this.androidPermissions.hasPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
       .then(status => {
         if (status.hasPermission) {
-          this.gerarCSV();
-          this.carregando();
+          this.formatoArquivo()
         } 
         else {
           this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
             .then(status => {
               if(status.hasPermission) {
-                this.gerarCSV();
-                this.carregando();
+                this.formatoArquivo()
               }
             });
         }
@@ -200,9 +205,56 @@ export class GerarEmailPage {
     
   }
 
+  async formatoArquivo(){
+    const editSituacao = await this.alertController.create({
+      header: 'Em que formato deseja enviar as listas:',
+      inputs:[
+        {
+          name: 'xlsx',
+          type: 'radio',
+          label: 'XLSX(EXCEL)',
+          value: 1
+        },
+        {
+          name: 'pdf',
+          type: 'radio',
+          label: 'PDF',
+          value: 2
+        },
+        {
+          name: 'csv',
+          type: 'radio',
+          label: 'CSV',
+          value: 3
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'my-custom-class',
+          handler: () => {
+          }
+        }, {
+          text: 'Ok',
+          handler: (data) => {
+            if(data === 1){
+              this.gerarXLSX()
+            }else if(data === 2){
+              this.gerarPDF()
+            }else{
+              this.gerarCSV()
+            }
+          }
+        }
+      ]
+    });
+    await editSituacao.present();
+  }
+
   async alertEmailDestino(){
     const editSituacao = await this.alertController.create({
-      header: 'Informe o E-mail que receberá os dados',
+      header: 'Informe o E-mail que deseja enviar os dados:',
       inputs:[
         {
           name: 'email',
@@ -243,20 +295,39 @@ export class GerarEmailPage {
       this.alertEmailDestino();
     },5000);
   }
+  
+  enviar(email){
+    this.socialSharing.shareViaEmail(
+      '<table><tr><th>Company</th><th>Contact</th><th>Country</th></tr>', 
+      'Titulo', 
+      [email], 
+      [], 
+      [], 
+      this.localDisc
+      ).then(() => {
 
-  enviar(emailDestino: string){
-    console.log(this.localDisc)
-    let email = {
-      to: emailDestino,
-      attachments: this.localDisc,
+      this.localDisc = []
 
-      subject: 'LISTAS DE FREQUÊNCIA DOS UNIVERSITÁRIOS UNILAB',
-      body: 'Obs: Nas colunas ',
-      isHtml: true
-    };
-    this.emailComposer.open(email)
-    this.localDisc = []
+    }).catch(() => {
+
+      this.localDisc = []
+
+    });
   }
+
+  // enviar(emailDestino: string){
+  //   console.log(this.localDisc)
+  //   let email = {
+  //     to: emailDestino,
+  //     attachments: this.localDisc,
+
+  //     subject: 'LISTAS DE FREQUÊNCIA DOS UNIVERSITÁRIOS UNILAB',
+  //     body: 'Obs: Nas colunas ',
+  //     isHtml: true
+  //   };
+  //   this.emailComposer.open(email)
+  //   this.localDisc = []
+  // }
 
 
 
@@ -275,5 +346,4 @@ export class GerarEmailPage {
     });
     await editSituacao.present();
   }
-
 }

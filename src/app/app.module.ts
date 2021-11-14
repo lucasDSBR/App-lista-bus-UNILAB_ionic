@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AutenticacaoGuard } from '../Service/autenticacao-guard.service';
 import { LoginService } from '../Service/Login.service';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
+//import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import {File} from '@ionic-native/file';
 @NgModule({
   declarations: [AppComponent],
@@ -23,8 +23,7 @@ import {File} from '@ionic-native/file';
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
     AutenticacaoGuard, 
-    LoginService, 
-    EmailComposer,
+    LoginService,
     
   ],
   bootstrap: [AppComponent],
