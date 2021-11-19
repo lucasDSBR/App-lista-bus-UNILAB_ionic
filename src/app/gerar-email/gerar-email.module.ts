@@ -22,6 +22,6 @@ import { Document, Packer } from 'docx';
     GerarEmailPageRoutingModule
   ],
   declarations: [GerarEmailPage],
-  providers: [Base64, File, AndroidPermissions, SocialSharing, Document, Packer]
+  providers: [Base64, File, AndroidPermissions, SocialSharing]
 })
 export class GerarEmailPageModule {}

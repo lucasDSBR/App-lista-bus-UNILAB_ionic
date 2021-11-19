@@ -16,6 +16,7 @@ import autoTable from 'jspdf-autotable'
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
+
 @Component({
   selector: 'app-gerar-email',
   templateUrl: './gerar-email.page.html',
@@ -298,8 +299,8 @@ export class GerarEmailPage {
   
   enviar(email){
     this.socialSharing.shareViaEmail(
-      '<table><tr><th>Company</th><th>Contact</th><th>Country</th></tr>', 
-      'Titulo', 
+      'Arquivos:', 
+      'LISTA DOS UNIVERSITÁRIOS UNILAB', 
       [email], 
       [], 
       [], 
